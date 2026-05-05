@@ -1,0 +1,780 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <title>CarWatch — Veilingauto Analyse Tool</title>
+  <style>
+    :root {
+      --blue:      #0F4C81;
+      --midblue:   #7DA8D0;
+      --lightblue: #E8F0FB;
+      --accent:    #1E6DB7;
+      --dark:      #0a3259;
+      --white:     #ffffff;
+      --gray:      #f4f7fb;
+      --text:      #1a2940;
+      --muted:     #5c7a9e;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: var(--white);
+      color: var(--text);
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+      overflow-x: hidden;
+    }
+
+    /* ─── NAV ─────────────────────────────────────────── */
+    nav {
+      background: var(--blue);
+      padding: 0 20px;
+      padding-left: max(20px, env(safe-area-inset-left));
+      padding-right: max(20px, env(safe-area-inset-right));
+      height: 56px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      box-shadow: 0 2px 12px rgba(15,76,129,0.3);
+    }
+
+    .nav-logo {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      color: white;
+      font-weight: 700;
+      font-size: 1.05rem;
+      letter-spacing: 0.02em;
+    }
+
+    .nav-badge {
+      background: rgba(255,255,255,0.15);
+      color: white;
+      font-size: 0.65rem;
+      padding: 2px 7px;
+      border-radius: 20px;
+      font-weight: 500;
+      letter-spacing: 0.05em;
+    }
+
+    /* ─── HERO ────────────────────────────────────────── */
+    .hero {
+      background: linear-gradient(155deg, var(--dark) 0%, var(--blue) 55%, var(--accent) 100%);
+      padding: 52px 20px 48px;
+      padding-left: max(20px, env(safe-area-inset-left));
+      padding-right: max(20px, env(safe-area-inset-right));
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(ellipse at 70% 50%, rgba(125,168,208,0.18) 0%, transparent 60%);
+    }
+
+    .hero-eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      background: rgba(255,255,255,0.12);
+      color: rgba(255,255,255,0.9);
+      font-size: 0.7rem;
+      font-weight: 600;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      padding: 5px 12px;
+      border-radius: 20px;
+      margin-bottom: 16px;
+      border: 1px solid rgba(255,255,255,0.2);
+      position: relative;
+    }
+
+    .hero h1 {
+      font-size: 2rem;
+      font-weight: 800;
+      color: white;
+      letter-spacing: -0.02em;
+      line-height: 1.15;
+      margin-bottom: 14px;
+      position: relative;
+    }
+
+    .hero h1 span {
+      background: linear-gradient(90deg, #93c5fd, #bfdbfe);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .hero-sub {
+      font-size: 0.9rem;
+      color: rgba(255,255,255,0.72);
+      max-width: 320px;
+      margin: 0 auto 32px;
+      line-height: 1.65;
+      position: relative;
+    }
+
+    .hero-stats {
+      display: flex;
+      justify-content: center;
+      gap: 0;
+      position: relative;
+    }
+
+    .hero-stat {
+      flex: 1;
+      text-align: center;
+      padding: 0 4px;
+    }
+
+    .hero-stat-num {
+      display: block;
+      font-size: 1.6rem;
+      font-weight: 800;
+      color: white;
+    }
+
+    .hero-stat-label {
+      font-size: 0.65rem;
+      color: rgba(255,255,255,0.55);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .hero-stat-divider {
+      width: 1px;
+      background: rgba(255,255,255,0.15);
+      align-self: stretch;
+      flex-shrink: 0;
+    }
+
+    /* ─── SECTION COMMON ──────────────────────────────── */
+    .section-label {
+      text-align: center;
+      font-size: 0.7rem;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--blue);
+      margin-bottom: 8px;
+    }
+
+    .section-title {
+      text-align: center;
+      font-size: 1.45rem;
+      font-weight: 800;
+      color: var(--text);
+      margin-bottom: 6px;
+      letter-spacing: -0.01em;
+    }
+
+    .section-sub {
+      text-align: center;
+      font-size: 0.85rem;
+      color: var(--muted);
+      max-width: 300px;
+      margin: 0 auto 28px;
+      line-height: 1.6;
+    }
+
+    /* ─── MOCK UI ─────────────────────────────────────── */
+    .mockup-section {
+      background: var(--gray);
+      padding: 48px 16px;
+    }
+
+    .app-window {
+      max-width: 100%;
+      background: white;
+      border-radius: 14px;
+      box-shadow: 0 16px 48px rgba(15,76,129,0.14), 0 4px 12px rgba(0,0,0,0.06);
+      overflow: hidden;
+      border: 1px solid #d8e5f5;
+    }
+
+    .app-titlebar {
+      background: var(--blue);
+      padding: 10px 16px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .app-dots { display: flex; gap: 5px; }
+    .app-dot { width: 10px; height: 10px; border-radius: 50%; }
+    .dot-red   { background: #ff5f57; }
+    .dot-amber { background: #febc2e; }
+    .dot-green { background: #28c840; }
+
+    .app-bar-title {
+      color: rgba(255,255,255,0.85);
+      font-size: 0.72rem;
+      font-weight: 600;
+      letter-spacing: 0.04em;
+    }
+
+    /* mobile nav tabs inside mock */
+    .app-tabs {
+      display: flex;
+      background: var(--dark);
+      border-bottom: 1px solid rgba(255,255,255,0.08);
+    }
+
+    .app-tab {
+      flex: 1;
+      padding: 10px 4px;
+      text-align: center;
+      font-size: 0.68rem;
+      font-weight: 600;
+      color: rgba(255,255,255,0.5);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 3px;
+    }
+
+    .app-tab.active {
+      color: white;
+      border-bottom: 2px solid var(--midblue);
+    }
+
+    .app-tab svg { width: 14px; height: 14px; }
+
+    .app-content { padding: 14px; background: var(--gray); }
+
+    /* Input row */
+    .input-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+      margin-bottom: 10px;
+    }
+
+    .mock-input {
+      border: 1.5px solid #d0e1f5;
+      border-radius: 8px;
+      padding: 8px 10px;
+      font-size: 0.72rem;
+      color: var(--text);
+      background: white;
+    }
+
+    .mock-input.highlight {
+      border-color: var(--blue);
+      background: var(--lightblue);
+      grid-column: 1 / -1;
+    }
+
+    .mock-input .lbl {
+      display: block;
+      font-size: 0.6rem;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      margin-bottom: 1px;
+    }
+
+    .mock-input .val-txt {
+      font-weight: 600;
+      font-size: 0.82rem;
+    }
+
+    .mock-btn {
+      grid-column: 1 / -1;
+      background: var(--blue);
+      color: white;
+      border: none;
+      border-radius: 8px;
+      padding: 10px;
+      font-size: 0.82rem;
+      font-weight: 700;
+      text-align: center;
+      letter-spacing: 0.02em;
+    }
+
+    /* Result card */
+    .result-card {
+      background: white;
+      border-radius: 10px;
+      border: 1px solid #d8e9f7;
+      overflow: hidden;
+      margin-top: 10px;
+    }
+
+    .result-header {
+      background: var(--blue);
+      padding: 10px 12px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .result-kenteken { font-size: 0.58rem; color: rgba(255,255,255,0.6); text-transform: uppercase; letter-spacing: 0.08em; }
+    .result-auto { font-size: 0.8rem; font-weight: 700; color: white; }
+
+    .result-score { text-align: right; }
+    .score-label { font-size: 0.55rem; color: rgba(255,255,255,0.6); text-transform: uppercase; }
+    .score-value { font-size: 1.3rem; font-weight: 800; color: #4ade80; }
+
+    .result-body { padding: 10px 12px; }
+
+    .result-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 8px;
+      margin-bottom: 10px;
+    }
+
+    .result-item label {
+      display: block;
+      font-size: 0.58rem;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      margin-bottom: 1px;
+    }
+
+    .result-item .v {
+      font-size: 0.75rem;
+      font-weight: 700;
+      color: var(--text);
+    }
+
+    .result-item .v.green { color: #16a34a; }
+    .result-item .v.orange { color: #d97706; }
+
+    .ai-verdict {
+      background: var(--lightblue);
+      border-left: 3px solid var(--blue);
+      border-radius: 6px;
+      padding: 8px 10px;
+      font-size: 0.7rem;
+      color: var(--text);
+      line-height: 1.5;
+    }
+
+    .ai-verdict strong.head {
+      display: block;
+      font-size: 0.58rem;
+      text-transform: uppercase;
+      letter-spacing: 0.07em;
+      color: var(--blue);
+      margin-bottom: 3px;
+    }
+
+    /* ─── FEATURES ────────────────────────────────────── */
+    .features {
+      padding: 48px 16px;
+      background: white;
+    }
+
+    .feature-grid {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .feature-card {
+      border: 1.5px solid #dce9f7;
+      border-radius: 14px;
+      padding: 20px;
+      display: flex;
+      gap: 16px;
+      align-items: flex-start;
+    }
+
+    .feature-icon {
+      width: 44px; height: 44px;
+      min-width: 44px;
+      border-radius: 11px;
+      background: var(--lightblue);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .feature-icon svg { color: var(--blue); }
+
+    .feature-text h3 {
+      font-size: 0.95rem;
+      font-weight: 700;
+      color: var(--text);
+      margin-bottom: 5px;
+    }
+
+    .feature-text p {
+      font-size: 0.8rem;
+      color: var(--muted);
+      line-height: 1.6;
+    }
+
+    .feature-tag {
+      display: inline-block;
+      margin-top: 8px;
+      background: var(--lightblue);
+      color: var(--blue);
+      font-size: 0.65rem;
+      font-weight: 600;
+      padding: 3px 9px;
+      border-radius: 20px;
+    }
+
+    /* ─── HOW IT WORKS ────────────────────────────────── */
+    .how {
+      background: var(--gray);
+      padding: 48px 16px;
+    }
+
+    .flow-steps {
+      display: flex;
+      flex-direction: column;
+      gap: 0;
+    }
+
+    .flow-step {
+      display: flex;
+      gap: 16px;
+      align-items: flex-start;
+      padding-bottom: 24px;
+      position: relative;
+    }
+
+    .flow-step:not(:last-child)::after {
+      content: '';
+      position: absolute;
+      left: 23px;
+      top: 48px;
+      bottom: 0;
+      width: 2px;
+      background: linear-gradient(to bottom, var(--midblue), var(--lightblue));
+    }
+
+    .step-circle {
+      width: 48px; height: 48px;
+      min-width: 48px;
+      border-radius: 50%;
+      background: var(--blue);
+      color: white;
+      font-weight: 800;
+      font-size: 1rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 4px 14px rgba(15,76,129,0.3);
+      position: relative;
+      z-index: 1;
+    }
+
+    .step-body { padding-top: 10px; }
+
+    .flow-step h4 {
+      font-size: 0.95rem;
+      font-weight: 700;
+      color: var(--text);
+      margin-bottom: 4px;
+    }
+
+    .flow-step p {
+      font-size: 0.8rem;
+      color: var(--muted);
+      line-height: 1.55;
+    }
+
+    /* ─── FOOTER ──────────────────────────────────────── */
+    footer {
+      background: var(--dark);
+      padding: 20px 20px;
+      padding-bottom: max(20px, env(safe-area-inset-bottom));
+      text-align: center;
+    }
+
+    .footer-logo {
+      font-weight: 800;
+      font-size: 1rem;
+      color: white;
+      margin-bottom: 4px;
+    }
+
+    footer span {
+      display: block;
+      font-size: 0.72rem;
+      color: rgba(255,255,255,0.4);
+    }
+
+    /* ─── ANIMATIONS ──────────────────────────────────── */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(16px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    .hero > * { animation: fadeUp 0.45s ease both; }
+    .hero > *:nth-child(1) { animation-delay: 0.1s; }
+    .hero > *:nth-child(2) { animation-delay: 0.2s; }
+    .hero > *:nth-child(3) { animation-delay: 0.3s; }
+    .hero > *:nth-child(4) { animation-delay: 0.4s; }
+  </style>
+</head>
+<body>
+
+<!-- ─── NAV ──────────────────────────────────────────────── -->
+<nav>
+  <div class="nav-logo">
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.2">
+      <path stroke-linecap="round" stroke-linejoin="round"
+        d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 11h.01M12 11h.01M15 11h.01
+           M4 19h16a2 2 0 002-2V7a2 2 0 00-2-2H4a2 2 0 00-2 2v10a2 2 0 002 2z"/>
+    </svg>
+    CarWatch
+    <span class="nav-badge">BETA</span>
+  </div>
+</nav>
+
+<!-- ─── HERO ──────────────────────────────────────────────── -->
+<section class="hero">
+  <div class="hero-eyebrow">
+    <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+      <path stroke-linecap="round" stroke-linejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z"/>
+    </svg>
+    AI-gedreven veilinganalyse
+  </div>
+  <h1>
+    Slimmer bieden op<br/>
+    <span>veilingauto's</span>
+  </h1>
+  <p class="hero-sub">
+    Kenteken opgeven, veilingprijs invoeren — en AI geeft direct een onderbouwd taxatieadvies.
+  </p>
+  <div class="hero-stats">
+    <div class="hero-stat">
+      <span class="hero-stat-num">3</span>
+      <span class="hero-stat-label">Databronnen</span>
+    </div>
+    <div class="hero-stat-divider"></div>
+    <div class="hero-stat">
+      <span class="hero-stat-num">&lt;10s</span>
+      <span class="hero-stat-label">Analysetijd</span>
+    </div>
+    <div class="hero-stat-divider"></div>
+    <div class="hero-stat">
+      <span class="hero-stat-num">100%</span>
+      <span class="hero-stat-label">Cloud</span>
+    </div>
+    <div class="hero-stat-divider"></div>
+    <div class="hero-stat">
+      <span class="hero-stat-num">∞</span>
+      <span class="hero-stat-label">Archief</span>
+    </div>
+  </div>
+</section>
+
+<!-- ─── MOCK UI ────────────────────────────────────────────── -->
+<section class="mockup-section" id="product">
+  <div class="section-label">Live interface</div>
+  <h2 class="section-title">Alles op één scherm</h2>
+  <p class="section-sub">Kenteken + veilingprijs ingeven, rest doet CarWatch.</p>
+
+  <div class="app-window">
+    <div class="app-titlebar">
+      <div class="app-dots">
+        <div class="app-dot dot-red"></div>
+        <div class="app-dot dot-amber"></div>
+        <div class="app-dot dot-green"></div>
+      </div>
+      <div class="app-bar-title">CarWatch — veilinganalyse</div>
+    </div>
+
+    <!-- Tab bar (mobile-style) -->
+    <div class="app-tabs">
+      <div class="app-tab active">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path stroke-linecap="round" stroke-linejoin="round"
+            d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 11h.01M12 11h.01M15 11h.01
+               M4 19h16a2 2 0 002-2V7a2 2 0 00-2-2H4a2 2 0 00-2 2v10a2 2 0 002 2z"/>
+        </svg>
+        Taxeer
+      </div>
+      <div class="app-tab">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path stroke-linecap="round" stroke-linejoin="round"
+            d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+        </svg>
+        Schade
+      </div>
+      <div class="app-tab">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path stroke-linecap="round" stroke-linejoin="round"
+            d="M5 8h14M5 8a2 2 0 110-4h14a2 2 0 110 4M5 8v10a2 2 0 002 2h10a2 2 0 002-2V8m-9 4h4"/>
+        </svg>
+        Archief
+      </div>
+    </div>
+
+    <div class="app-content">
+      <div class="input-row">
+        <div class="mock-input highlight">
+          <span class="lbl">Kenteken</span>
+          <span class="val-txt">12-ABC-3</span>
+        </div>
+        <div class="mock-input">
+          <span class="lbl">Km-stand</span>
+          <span class="val-txt">87.500</span>
+        </div>
+        <div class="mock-input">
+          <span class="lbl">Veilingprijs</span>
+          <span class="val-txt">€ 14.250</span>
+        </div>
+        <div class="mock-btn">Analyseer →</div>
+      </div>
+
+      <div class="result-card">
+        <div class="result-header">
+          <div>
+            <div class="result-kenteken">Kenteken • RDW geverifieerd</div>
+            <div class="result-auto">VW Golf 1.5 TSI — 2021</div>
+          </div>
+          <div class="result-score">
+            <div class="score-label">Score</div>
+            <div class="score-value">7.8</div>
+          </div>
+        </div>
+        <div class="result-body">
+          <div class="result-grid">
+            <div class="result-item">
+              <label>Marktwaarde</label>
+              <div class="v">€ 17.500</div>
+            </div>
+            <div class="result-item">
+              <label>Marge</label>
+              <div class="v green">€ 2.850+</div>
+            </div>
+            <div class="result-item">
+              <label>APK</label>
+              <div class="v orange">aug 2025</div>
+            </div>
+          </div>
+          <div class="ai-verdict">
+            <strong class="head">AI Taxatieverdikt — Gemini Flash</strong>
+            Gezonde handelsmarge. RDW bevestigt bouwjaar.
+            APK verloopt binnenkort — kosten gering.
+            <strong>Max bod: € 15.000</strong>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ─── FEATURES ───────────────────────────────────────────── -->
+<section class="features">
+  <div class="section-label">Wat CarWatch doet</div>
+  <h2 class="section-title">Drie kernmodules</h2>
+  <p class="section-sub">Alles wat je op de veiling nodig hebt, op één plek.</p>
+
+  <div class="feature-grid">
+    <div class="feature-card">
+      <div class="feature-icon">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path stroke-linecap="round" stroke-linejoin="round"
+            d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 11h.01M12 11h.01M15 11h.01
+               M4 19h16a2 2 0 002-2V7a2 2 0 00-2-2H4a2 2 0 00-2 2v10a2 2 0 002 2z"/>
+        </svg>
+      </div>
+      <div class="feature-text">
+        <h3>Taxatieanalyse</h3>
+        <p>Kenteken + veilingprijs ingeven. CarWatch combineert RDW, JP.cars en Gemini AI tot een concreet biedadvies.</p>
+        <span class="feature-tag">Kenteken → Advies in &lt;10s</span>
+      </div>
+    </div>
+
+    <div class="feature-card">
+      <div class="feature-icon">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path stroke-linecap="round" stroke-linejoin="round"
+            d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586
+               a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+        </svg>
+      </div>
+      <div class="feature-text">
+        <h3>Schadeanalyse</h3>
+        <p>Upload een PDF-schaderapport of plak de tekst. Gemini extraheert schadeposten en berekent herstelkosten.</p>
+        <span class="feature-tag">PDF of tekst → Gestructureerde analyse</span>
+      </div>
+    </div>
+
+    <div class="feature-card">
+      <div class="feature-icon">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path stroke-linecap="round" stroke-linejoin="round"
+            d="M5 8h14M5 8a2 2 0 110-4h14a2 2 0 110 4M5 8v10a2 2 0 002 2h10a2 2 0 002-2V8m-9 4h4"/>
+        </svg>
+      </div>
+      <div class="feature-text">
+        <h3>Persoonlijk Archief</h3>
+        <p>Elke analyse wordt automatisch opgeslagen per gebruiker. Zoek terug en vergelijk eerder bekeken auto's.</p>
+        <span class="feature-tag">Historisch overzicht per account</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ─── HOW IT WORKS ───────────────────────────────────────── -->
+<section class="how" id="flow">
+  <div class="section-label">Werking</div>
+  <h2 class="section-title">Hoe het werkt</h2>
+  <p class="section-sub">Van kenteken naar gefundeerd biedadvies in vier stappen.</p>
+
+  <div class="flow-steps">
+    <div class="flow-step">
+      <div class="step-circle">1</div>
+      <div class="step-body">
+        <h4>Invoer</h4>
+        <p>Kenteken, km-stand en veilingprijs ingeven — of een schaderapport uploaden.</p>
+      </div>
+    </div>
+    <div class="flow-step">
+      <div class="step-circle">2</div>
+      <div class="step-body">
+        <h4>Databronnen</h4>
+        <p>RDW kentekendienst en JP.cars API leveren voertuig- en marktdata.</p>
+      </div>
+    </div>
+    <div class="flow-step">
+      <div class="step-circle">3</div>
+      <div class="step-body">
+        <h4>AI Analyse</h4>
+        <p>Gemini Flash met Google Search grounding verwerkt alle data tot taxatieverdikt.</p>
+      </div>
+    </div>
+    <div class="flow-step">
+      <div class="step-circle">4</div>
+      <div class="step-body">
+        <h4>Biedadvies</h4>
+        <p>Score, margemarge en concreet maximumbod — direct inzetbaar op de veilingvloer.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ─── FOOTER ─────────────────────────────────────────────── -->
+<footer>
+  <div class="footer-logo">CarWatch</div>
+  <span>Gebouwd door Bart van Slobbe · 2026</span>
+</footer>
+
+</body>
+</html>
