@@ -365,7 +365,7 @@
     <span class="demo-badge">Demo</span>
   </div>
   <div class="header-right">
-    <span class="h-pill mobile-hide">🤖 Gemini AI</span>
+    <span class="h-pill mobile-hide">🤖 CarWatch AI</span>
     <span class="h-pill mobile-hide">📊 Autotelex · JP.cars</span>
     <a class="back-link" href="index.html">← Terug</a>
   </div>
@@ -420,7 +420,7 @@
         <label class="toggle-item"><div class="toggle on" onclick="this.classList.toggle('on')"></div>JP.cars</label>
         <label class="toggle-item"><div class="toggle on" onclick="this.classList.toggle('on')"></div>Autotelex Pro</label>
         <label class="toggle-item"><div class="toggle on" onclick="this.classList.toggle('on')"></div>ANWB</label>
-        <label class="toggle-item"><div class="toggle on" onclick="this.classList.toggle('on')"></div>Gemini AI</label>
+        <label class="toggle-item"><div class="toggle on" onclick="this.classList.toggle('on')"></div>CarWatch AI</label>
       </div>
     </div>
   </div>
@@ -561,7 +561,7 @@ function runAnalysis(type) {
   let steps, title, totalDelay;
   const handlers = {
     kenteken: [
-      [{id:'rdw',icon:'🏛️',label:'RDW kenteken opzoeken...',dur:700},{id:'jpc',icon:'📊',label:'JP.cars ophalen...',dur:700},{id:'atx',icon:'📈',label:'Autotelex Pro ophalen...',dur:800},{id:'anwb',icon:'📋',label:'ANWB Koerslijst...',dur:600},{id:'ai',icon:'🤖',label:'Gemini AI analyseert...',dur:1000},{id:'rep',icon:'📋',label:'Rapport samenstellen...',dur:400}],
+      [{id:'rdw',icon:'🏛️',label:'RDW kenteken opzoeken...',dur:700},{id:'jpc',icon:'📊',label:'JP.cars ophalen...',dur:700},{id:'atx',icon:'📈',label:'Autotelex Pro ophalen...',dur:800},{id:'anwb',icon:'📋',label:'ANWB Koerslijst...',dur:600},{id:'ai',icon:'🤖',label:'CarWatch AI analyseert...',dur:1000},{id:'rep',icon:'📋',label:'Rapport samenstellen...',dur:400}],
       `Analyseren: ${(document.getElementById('kenteken-input').value||'9-XKP-14').toUpperCase()}`,
       showKentekenResult
     ],
@@ -596,7 +596,7 @@ function showResult(html) {
 }
 
 function sourcesPills(active) {
-  const all = [['🏛️','RDW'],['📊','JP.cars'],['📈','Autotelex Pro'],['📋','ANWB'],['🌍','DAT/Eurotax'],['🔁','Cars2Click'],['🤖','Gemini AI']];
+  const all = [['🏛️','RDW'],['📊','JP.cars'],['📈','Autotelex Pro'],['📋','ANWB'],['🌍','DAT/Eurotax'],['🔁','Cars2Click'],['🤖','CarWatch AI']];
   return `<div class="sources-row">${all.map(([i,n])=>`<span class="source-pill ${active.includes(n)?'active':''}">${i} ${n}</span>`).join('')}</div>`;
 }
 
@@ -615,7 +615,7 @@ function showKentekenResult() {
       </div>
       <div class="tags"><span class="tag">Mineralgrau</span><span class="tag">Leder zwart</span><span class="tag">Panoramadak</span><span class="tag">Trekhaak</span><span class="tag">Head-up Display</span></div>
     </div>
-    ${sourcesPills(['RDW','JP.cars','Autotelex Pro','ANWB','Gemini AI'])}
+    ${sourcesPills(['RDW','JP.cars','Autotelex Pro','ANWB','CarWatch AI'])}
     <div class="score-section">
       <div class="score-card score-good"><div class="score-label">Marktscore</div><div class="score-value">7.8 / 10</div><div class="score-bar-bg"><div class="score-bar-fill" style="width:78%"></div></div><div class="score-note">Goede vraag in dit segment</div></div>
       <div class="score-card score-warn"><div class="score-label">Margebeoordeling</div><div class="score-value">Opletten ⚠️</div><div class="score-note">Veilingprijs boven inkoopadvies. Marge krap bij schade.</div></div>
@@ -648,7 +648,7 @@ function showKentekenResult() {
       </div>
     </div>
     <div class="ai-card">
-      <div class="ai-card-header"><div class="ai-icon">${aiIconSVG}</div><div><div class="ai-card-header-title">Gemini AI Taxatie-analyse</div><div class="ai-card-header-sub">RDW · JP.cars · Autotelex Pro · ANWB · Gemini Flash</div></div></div>
+      <div class="ai-card-header"><div class="ai-icon">${aiIconSVG}</div><div><div class="ai-card-header-title">CarWatch AI Taxatie-analyse</div><div class="ai-card-header-sub">RDW · JP.cars · Autotelex Pro · ANWB · CarWatch AI</div></div></div>
       <div class="ai-text">
         <p>De <span class="hl-blue">BMW 520d xDrive Touring (G31, 2019)</span> scoort goed in het Nederlandse gebruikte-autosegment. Autotelex Pro taxeert op <span class="hl-blue">€ 15.900</span>, JP.cars op <span class="hl-blue">€ 16.200</span> — een consistente bandbreedte. Met <span class="hl-yellow">142.000 km</span> zit het voertuig ruim boven gemiddelde voor dit bouwjaar, correctie <span class="hl-red">− € 1.200</span>.</p>
         <p>Rekening houdend met de beschreven schadeposten (geschat <span class="hl-red">€ 550–750</span>) en opknapkosten kom ik uit op een netto inkoopadvies van <span class="hl-green">€ 15.800</span>. De ANWB-koerslijst bevestigt een realistisch verkooppotentieel van <span class="hl-blue">€ 18.500</span>, wat een brutomarge van circa € 2.700 geeft voor dit voertuig in goede staat.</p>
@@ -669,7 +669,7 @@ function showEmailResult() {
       </div>
       <div class="tags"><span class="tag">📧 Uit e-mail</span><span class="tag">BCA Lot 247</span><span class="tag">Diesel Automaat</span></div>
     </div>
-    ${sourcesPills(['RDW','JP.cars','Autotelex Pro','Gemini AI'])}
+    ${sourcesPills(['RDW','JP.cars','Autotelex Pro','CarWatch AI'])}
     <div class="data-grid">
       <div class="data-card">
         <div class="data-card-title">🔍 Geëxtraheerde data</div>
@@ -688,7 +688,7 @@ function showEmailResult() {
       </div>
     </div>
     <div class="ai-card">
-      <div class="ai-card-header"><div class="ai-icon">${aiIconSVG}</div><div><div class="ai-card-header-title">AI Analyse op basis van e-mail</div><div class="ai-card-header-sub">Gemini Flash · Tekst + RDW + Autotelex Pro</div></div></div>
+      <div class="ai-card-header"><div class="ai-icon">${aiIconSVG}</div><div><div class="ai-card-header-title">AI Analyse op basis van e-mail</div><div class="ai-card-header-sub">CarWatch AI · Tekst + RDW + Autotelex Pro</div></div></div>
       <div class="ai-text">
         <p>CarWatch heeft <span class="hl-green">9 datapunten</span> uit de mail geëxtraheerd en geverifieerd via RDW en Autotelex Pro. De reserveprijs van <span class="hl-yellow">€ 16.200</span> ligt boven het inkoopadvies van <span class="hl-green">€ 15.600</span> — bieden boven reserveprijs maakt de marge krap.</p>
         <p><strong>Advies:</strong> Sla over als de prijs boven <span class="hl-green">€ 15.800</span> uitkomt. Er zijn 38 vergelijkbare voertuigen actief in de markt.</p>
@@ -708,7 +708,7 @@ function showPdfResult() {
       </div>
       <div class="tags"><span class="tag">📄 PDF gescand</span><span class="tag">9-XKP-14</span><span class="tag">BCA rapport</span></div>
     </div>
-    ${sourcesPills(['RDW','Autotelex Pro','Gemini AI'])}
+    ${sourcesPills(['RDW','Autotelex Pro','CarWatch AI'])}
     <div class="data-card" style="margin-bottom:10px;">
       <div class="data-card-title">🔧 Schadeposten uit PDF</div>
       <table class="damage-table">
@@ -728,7 +728,7 @@ function showPdfResult() {
       <div class="damage-total"><span style="color:var(--gray-mid);font-size:11px;font-weight:700;">Totaal herstelkosten</span><span style="color:var(--red);font-size:17px;font-weight:900;">€ 1.840</span></div>
     </div>
     <div class="ai-card">
-      <div class="ai-card-header"><div class="ai-icon">${aiIconSVG}</div><div><div class="ai-card-header-title">AI Schade-interpretatie</div><div class="ai-card-header-sub">Gemini Flash · OCR + Autotelex Pro schadeclassificatie</div></div></div>
+      <div class="ai-card-header"><div class="ai-icon">${aiIconSVG}</div><div><div class="ai-card-header-title">AI Schade-interpretatie</div><div class="ai-card-header-sub">CarWatch AI · OCR + Autotelex Pro schadeclassificatie</div></div></div>
       <div class="ai-text">
         <p>Het rapport toont <span class="hl-red">9 schadeposten</span> met een totale raming van <span class="hl-red">€ 1.840</span> — <span class="hl-red">€ 1.290 meer</span> dan de verbale beschrijving suggereerde. Autotelex Pro classificeert de schade op schadegraad 2 (cosmetisch, geen structurele issues).</p>
         <p><strong>Advies:</strong> Inkoopadvies zakt naar <span class="hl-red">€ 14.200</span>. Dit is waarom je altijd het schaderapport analyseert.</p>
@@ -748,7 +748,7 @@ function showLinkResult() {
       </div>
       <div class="tags"><span class="tag">🔗 Via URL</span><span class="tag">BCA NL24</span><span class="tag">Online veiling</span></div>
     </div>
-    ${sourcesPills(['RDW','JP.cars','Autotelex Pro','Cars2Click','Gemini AI'])}
+    ${sourcesPills(['RDW','JP.cars','Autotelex Pro','Cars2Click','CarWatch AI'])}
     <div class="data-grid">
       <div class="data-card">
         <div class="data-card-title">🌐 Lot-pagina data</div>
@@ -769,7 +769,7 @@ function showLinkResult() {
       </div>
     </div>
     <div class="ai-card">
-      <div class="ai-card-header"><div class="ai-icon">${aiIconSVG}</div><div><div class="ai-card-header-title">Live Veilingadvies</div><div class="ai-card-header-sub">Gemini Flash · Autotelex Pro · JP.cars · Cars2Click</div></div></div>
+      <div class="ai-card-header"><div class="ai-icon">${aiIconSVG}</div><div><div class="ai-card-header-title">Live Veilingadvies</div><div class="ai-card-header-sub">CarWatch AI · Autotelex Pro · JP.cars · Cars2Click</div></div></div>
       <div class="ai-text">
         <p>Huidig bod <span class="hl-yellow">€ 15.100</span> met 7 bieders actief. Autotelex Pro en Cars2Click bevestigen een marktwaarde van <span class="hl-blue">€ 15.900 – 16.100</span>. Inkoopadvies na schadeaftrek: <span class="hl-green">€ 15.500</span>. Er is nog <span class="hl-green">€ 400 speelruimte</span>.</p>
         <p><strong>Advies:</strong> Volg dit lot. Maximaal bieden tot <span class="hl-green">€ 15.500</span>. Daarboven: laten lopen.</p>
