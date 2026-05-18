@@ -95,15 +95,31 @@
 
   /* ─── TABS ─── */
   .tabs {
-    display: grid;
-    grid-template-columns: repeat(5, 1fr);
-    gap: 3px;
+    display: flex;
+    align-items: stretch;
+    gap: 0;
     background: var(--white);
     border: 1px solid var(--gray-bdr);
     border-radius: 10px;
     padding: 5px;
     margin-bottom: 16px;
     box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+  }
+  .tab-group {
+    flex: 1; display: flex; flex-direction: column; gap: 3px;
+  }
+  .tab-group-label {
+    font-size: 8px; font-weight: 900; text-transform: uppercase;
+    letter-spacing: 1.5px; color: var(--gray-mid);
+    text-align: center; padding: 2px 4px 0;
+  }
+  .tab-group-btns {
+    display: flex; gap: 3px; flex: 1;
+  }
+  .tab-group-btns .tab-btn { flex: 1; }
+  .tab-divider {
+    width: 1px; background: var(--gray-bdr);
+    margin: 4px 5px; flex-shrink: 0;
   }
   .tab-btn {
     padding: 10px 6px;
@@ -341,6 +357,7 @@
     .damage-table th:nth-child(2), .damage-table td:nth-child(2) { display: none; }
     .tab-btn { font-size: 9px; }
     .batch-col-inkoop, .batch-col-inkoop-h { display: none; }
+    .batch-col-jpcars, .batch-col-jpcars-h { display: none; }
     .batch-col-jaar, .batch-col-jaar-h { display: none; }
   }
 
@@ -359,7 +376,7 @@
   .batch-stat.red .batch-stat-value { color: var(--red); }
   .batch-stat.navy .batch-stat-value { color: var(--navy); font-size: 17px; }
   .batch-table-wrap { overflow-x: auto; border-radius: 10px; border: 1px solid var(--gray-bdr); margin-bottom: 10px; background: var(--white); }
-  .batch-table { width: 100%; border-collapse: collapse; font-size: 12px; font-family: var(--font); min-width: 580px; }
+  .batch-table { width: 100%; border-collapse: collapse; font-size: 12px; font-family: var(--font); min-width: 700px; }
   .batch-table th { padding: 9px 12px; font-size: 10px; text-transform: uppercase; letter-spacing: 1px; color: var(--gray-mid); font-weight: 900; border-bottom: 2px solid var(--gray-bdr); background: var(--gray-bg); text-align: left; white-space: nowrap; }
   .batch-table th:nth-child(n+5) { text-align: right; }
   .batch-table td { padding: 9px 12px; border-bottom: 1px solid var(--gray-bg); vertical-align: middle; }
@@ -418,21 +435,32 @@
 <div class="app">
 
   <div class="tabs">
-    <button class="tab-btn active" onclick="switchTab('kenteken',this)">
-      <span class="tab-icon">🔑</span>Kenteken
-    </button>
-    <button class="tab-btn" onclick="switchTab('email',this)">
-      <span class="tab-icon">📧</span>Email
-    </button>
-    <button class="tab-btn" onclick="switchTab('pdf',this)">
-      <span class="tab-icon">📄</span>PDF
-    </button>
-    <button class="tab-btn" onclick="switchTab('link',this)">
-      <span class="tab-icon">🔗</span>Link
-    </button>
-    <button class="tab-btn" onclick="switchTab('lijst',this)">
-      <span class="tab-icon">📋</span>Lijst
-    </button>
+    <div class="tab-group">
+      <div class="tab-group-label">🚗 Voertuig</div>
+      <div class="tab-group-btns">
+        <button class="tab-btn active" onclick="switchTab('kenteken',this)">
+          <span class="tab-icon">🔑</span>Kenteken
+        </button>
+        <button class="tab-btn" onclick="switchTab('email',this)">
+          <span class="tab-icon">📧</span>Email
+        </button>
+        <button class="tab-btn" onclick="switchTab('lijst',this)">
+          <span class="tab-icon">📋</span>Lijst
+        </button>
+      </div>
+    </div>
+    <div class="tab-divider"></div>
+    <div class="tab-group">
+      <div class="tab-group-label">🔧 Schade analyse</div>
+      <div class="tab-group-btns">
+        <button class="tab-btn" onclick="switchTab('pdf',this)">
+          <span class="tab-icon">📄</span>PDF
+        </button>
+        <button class="tab-btn" onclick="switchTab('link',this)">
+          <span class="tab-icon">🔗</span>Link
+        </button>
+      </div>
+    </div>
   </div>
 
   <!-- KENTEKEN -->
@@ -843,31 +871,31 @@ function showLinkResult() {
 
 // ─── BATCH / LIJST ───
 const BATCH_DATA = [
-  {kt:'9-XKP-14', model:'BMW 520d xDrive Touring', jaar:2019, km:'142.000', vraag:16500, inkoop:15800, marge:2700, adv:'kopen', schade:'Licht'},
-  {kt:'G-441-ZB', model:'Audi A4 Avant 2.0 TFSI', jaar:2020, km:'98.000', vraag:19800, inkoop:20400, marge:2100, adv:'kopen', schade:'Geen'},
-  {kt:'V-564-RG', model:'Ford Transit Custom L2', jaar:2020, km:'156.000', vraag:14500, inkoop:15100, marge:3200, adv:'kopen', schade:'Licht'},
-  {kt:'X-229-BT', model:'Toyota Yaris 1.5 Hybrid', jaar:2021, km:'67.000', vraag:14200, inkoop:15800, marge:2400, adv:'kopen', schade:'Geen'},
-  {kt:'Y-114-GK', model:'Toyota Proace Verso 2.0D', jaar:2021, km:'87.000', vraag:24600, inkoop:25800, marge:3400, adv:'kopen', schade:'Geen'},
-  {kt:'R-319-KF', model:'Volvo XC60 D4 AWD', jaar:2019, km:'134.000', vraag:22500, inkoop:23400, marge:2900, adv:'kopen', schade:'Licht'},
-  {kt:'B-447-XR', model:'Honda CR-V 1.5T AWD', jaar:2020, km:'88.000', vraag:21900, inkoop:22800, marge:2600, adv:'kopen', schade:'Geen'},
-  {kt:'F-663-LM', model:'Nissan Qashqai 1.3 DIG-T', jaar:2021, km:'74.000', vraag:17600, inkoop:18400, marge:2200, adv:'kopen', schade:'Geen'},
-  {kt:'D-758-NK', model:'Hyundai Tucson 1.6 T-GDI', jaar:2020, km:'109.000', vraag:18700, inkoop:19500, marge:2500, adv:'kopen', schade:'Licht'},
-  {kt:'W-891-ST', model:'Citroën Berlingo XL 1.5 dCi', jaar:2020, km:'143.000', vraag:13800, inkoop:14700, marge:2800, adv:'kopen', schade:'Licht'},
-  {kt:'Z-447-HG', model:'Volkswagen Golf 1.5 TSI', jaar:2021, km:'56.000', vraag:16900, inkoop:17800, marge:2300, adv:'kopen', schade:'Geen'},
-  {kt:'E-318-TL', model:'Ford Kuga 2.0 EcoBlue ST-Line', jaar:2020, km:'132.000', vraag:17200, inkoop:18100, marge:2600, adv:'kopen', schade:'Licht'},
-  {kt:'T-823-NH', model:'VW Passat Variant 2.0 TDI', jaar:2018, km:'187.000', vraag:11200, inkoop:9800, marge:1400, adv:'opletten', schade:'Matig'},
-  {kt:'N-388-KL', model:'Peugeot 3008 1.6 THP', jaar:2018, km:'201.000', vraag:12400, inkoop:11100, marge:900, adv:'opletten', schade:'Matig'},
-  {kt:'H-774-VP', model:'Renault Mégane 1.5 dCi', jaar:2018, km:'178.000', vraag:8900, inkoop:7600, marge:800, adv:'opletten', schade:'Matig'},
-  {kt:'J-112-WB', model:'SEAT León 2.0 TDI FR', jaar:2018, km:'166.000', vraag:9200, inkoop:8100, marge:600, adv:'opletten', schade:'Matig'},
-  {kt:'L-339-PH', model:'Kia Sportage 1.6 GDI', jaar:2019, km:'147.000', vraag:15300, inkoop:14200, marge:1100, adv:'opletten', schade:'Licht'},
-  {kt:'C-224-FJ', model:'BMW 318i Touring', jaar:2018, km:'193.000', vraag:12600, inkoop:10900, marge:400, adv:'opletten', schade:'Matig'},
-  {kt:'A-775-BX', model:'Peugeot 308 SW 1.5 BlueHDi', jaar:2019, km:'158.000', vraag:10300, inkoop:9200, marge:700, adv:'opletten', schade:'Matig'},
-  {kt:'P-881-ZN', model:'Skoda Octavia 2.0 TDI', jaar:2019, km:'121.000', vraag:14800, inkoop:13200, marge:1100, adv:'opletten', schade:'Licht'},
-  {kt:'K-117-PX', model:'Mercedes-Benz C220 CDI', jaar:2017, km:'224.000', vraag:13900, inkoop:10200, marge:-200, adv:'skip', schade:'Zwaar'},
-  {kt:'M-556-TG', model:'Opel Astra 1.6 CDTI', jaar:2017, km:'212.000', vraag:7400, inkoop:5800, marge:-300, adv:'skip', schade:'Matig'},
-  {kt:'Q-623-RW', model:'Mercedes-Benz Vito 116 CDI', jaar:2019, km:'178.000', vraag:18400, inkoop:15600, marge:-600, adv:'skip', schade:'Zwaar'},
-  {kt:'S-562-MV', model:'Audi Q3 35 TFSI S-line', jaar:2020, km:'91.000', vraag:22100, inkoop:21300, marge:-400, adv:'skip', schade:'Matig'},
-  {kt:'U-887-QP', model:'Renault Zoé R135 EV', jaar:2022, km:'48.000', vraag:19200, inkoop:18400, marge:-100, adv:'skip', schade:'Licht'},
+  {kt:'9-XKP-14', model:'BMW 520d xDrive Touring',      jaar:2019, km:'142.000', vraag:16500, jpcars:16200, inkoop:15800, marge:2700, adv:'kopen',    schade:'Licht'},
+  {kt:'G-441-ZB', model:'Audi A4 Avant 2.0 TFSI',       jaar:2020, km:'98.000',  vraag:19800, jpcars:20800, inkoop:20400, marge:2100, adv:'kopen',    schade:'Geen'},
+  {kt:'V-564-RG', model:'Ford Transit Custom L2',        jaar:2020, km:'156.000', vraag:14500, jpcars:15400, inkoop:15100, marge:3200, adv:'kopen',    schade:'Licht'},
+  {kt:'X-229-BT', model:'Toyota Yaris 1.5 Hybrid',      jaar:2021, km:'67.000',  vraag:14200, jpcars:15600, inkoop:15800, marge:2400, adv:'kopen',    schade:'Geen'},
+  {kt:'Y-114-GK', model:'Toyota Proace Verso 2.0D',      jaar:2021, km:'87.000',  vraag:24600, jpcars:25400, inkoop:25800, marge:3400, adv:'kopen',    schade:'Geen'},
+  {kt:'R-319-KF', model:'Volvo XC60 D4 AWD',            jaar:2019, km:'134.000', vraag:22500, jpcars:23200, inkoop:23400, marge:2900, adv:'kopen',    schade:'Licht'},
+  {kt:'B-447-XR', model:'Honda CR-V 1.5T AWD',          jaar:2020, km:'88.000',  vraag:21900, jpcars:22600, inkoop:22800, marge:2600, adv:'kopen',    schade:'Geen'},
+  {kt:'F-663-LM', model:'Nissan Qashqai 1.3 DIG-T',     jaar:2021, km:'74.000',  vraag:17600, jpcars:18200, inkoop:18400, marge:2200, adv:'kopen',    schade:'Geen'},
+  {kt:'D-758-NK', model:'Hyundai Tucson 1.6 T-GDI',     jaar:2020, km:'109.000', vraag:18700, jpcars:19200, inkoop:19500, marge:2500, adv:'kopen',    schade:'Licht'},
+  {kt:'W-891-ST', model:'Citroën Berlingo XL 1.5 dCi',  jaar:2020, km:'143.000', vraag:13800, jpcars:14500, inkoop:14700, marge:2800, adv:'kopen',    schade:'Licht'},
+  {kt:'Z-447-HG', model:'Volkswagen Golf 1.5 TSI',      jaar:2021, km:'56.000',  vraag:16900, jpcars:17600, inkoop:17800, marge:2300, adv:'kopen',    schade:'Geen'},
+  {kt:'E-318-TL', model:'Ford Kuga 2.0 EcoBlue ST-Line',jaar:2020, km:'132.000', vraag:17200, jpcars:17900, inkoop:18100, marge:2600, adv:'kopen',    schade:'Licht'},
+  {kt:'T-823-NH', model:'VW Passat Variant 2.0 TDI',    jaar:2018, km:'187.000', vraag:11200, jpcars:10400, inkoop:9800,  marge:1400, adv:'opletten', schade:'Matig'},
+  {kt:'N-388-KL', model:'Peugeot 3008 1.6 THP',         jaar:2018, km:'201.000', vraag:12400, jpcars:11800, inkoop:11100, marge:900,  adv:'opletten', schade:'Matig'},
+  {kt:'H-774-VP', model:'Renault Mégane 1.5 dCi',       jaar:2018, km:'178.000', vraag:8900,  jpcars:8200,  inkoop:7600,  marge:800,  adv:'opletten', schade:'Matig'},
+  {kt:'J-112-WB', model:'SEAT León 2.0 TDI FR',         jaar:2018, km:'166.000', vraag:9200,  jpcars:8800,  inkoop:8100,  marge:600,  adv:'opletten', schade:'Matig'},
+  {kt:'L-339-PH', model:'Kia Sportage 1.6 GDI',         jaar:2019, km:'147.000', vraag:15300, jpcars:14800, inkoop:14200, marge:1100, adv:'opletten', schade:'Licht'},
+  {kt:'C-224-FJ', model:'BMW 318i Touring',              jaar:2018, km:'193.000', vraag:12600, jpcars:11600, inkoop:10900, marge:400,  adv:'opletten', schade:'Matig'},
+  {kt:'A-775-BX', model:'Peugeot 308 SW 1.5 BlueHDi',   jaar:2019, km:'158.000', vraag:10300, jpcars:9800,  inkoop:9200,  marge:700,  adv:'opletten', schade:'Matig'},
+  {kt:'P-881-ZN', model:'Skoda Octavia 2.0 TDI',        jaar:2019, km:'121.000', vraag:14800, jpcars:13800, inkoop:13200, marge:1100, adv:'opletten', schade:'Licht'},
+  {kt:'K-117-PX', model:'Mercedes-Benz C220 CDI',       jaar:2017, km:'224.000', vraag:13900, jpcars:11400, inkoop:10200, marge:-200, adv:'skip',     schade:'Zwaar'},
+  {kt:'M-556-TG', model:'Opel Astra 1.6 CDTI',          jaar:2017, km:'212.000', vraag:7400,  jpcars:6600,  inkoop:5800,  marge:-300, adv:'skip',     schade:'Matig'},
+  {kt:'Q-623-RW', model:'Mercedes-Benz Vito 116 CDI',   jaar:2019, km:'178.000', vraag:18400, jpcars:17200, inkoop:15600, marge:-600, adv:'skip',     schade:'Zwaar'},
+  {kt:'S-562-MV', model:'Audi Q3 35 TFSI S-line',       jaar:2020, km:'91.000',  vraag:22100, jpcars:22400, inkoop:21300, marge:-400, adv:'skip',     schade:'Matig'},
+  {kt:'U-887-QP', model:'Renault Zoé R135 EV',          jaar:2022, km:'48.000',  vraag:19200, jpcars:19600, inkoop:18400, marge:-100, adv:'skip',     schade:'Licht'},
 ];
 
 let batchLoaded = false;
@@ -906,6 +934,7 @@ function showBatchResult() {
       <td><div class="batch-model">${c.model}</div><div class="batch-sub">${c.jaar} · ${c.km} km · ${c.schade} schade</div></td>
       <td class="batch-col-jaar">${c.jaar}</td>
       <td>${fmt(c.vraag)}</td>
+      <td class="batch-col-jpcars" style="color:var(--navy);font-weight:900;">${fmt(c.jpcars)}</td>
       <td class="batch-col-inkoop">${fmt(c.inkoop)}</td>
       <td class="${margeClass(c.marge)}">${c.marge >= 0 ? '+' : ''}${fmt(c.marge)}</td>
       <td>${advBadge(c.adv)}</td>
@@ -938,6 +967,7 @@ function showBatchResult() {
           <th>Voertuig</th>
           <th class="batch-col-jaar-h">Jaar</th>
           <th style="text-align:right">Vraagprijs</th>
+          <th class="batch-col-jpcars-h" style="text-align:right">JP.cars</th>
           <th class="batch-col-inkoop-h" style="text-align:right">Inkoopadvies</th>
           <th style="text-align:right">Marge</th>
           <th>Advies</th>
