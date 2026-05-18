@@ -96,7 +96,7 @@
   /* ─── TABS ─── */
   .tabs {
     display: grid;
-    grid-template-columns: repeat(4, 1fr);
+    grid-template-columns: repeat(5, 1fr);
     gap: 3px;
     background: var(--white);
     border: 1px solid var(--gray-bdr);
@@ -339,7 +339,45 @@
     .verdicts { width: 100%; }
     .verdict-badge { flex: 1; }
     .damage-table th:nth-child(2), .damage-table td:nth-child(2) { display: none; }
+    .tab-btn { font-size: 9px; }
+    .batch-col-inkoop, .batch-col-inkoop-h { display: none; }
+    .batch-col-jaar, .batch-col-jaar-h { display: none; }
   }
+
+  /* ─── BATCH ─── */
+  .batch-summary {
+    display: grid; grid-template-columns: repeat(auto-fill, minmax(130px,1fr)); gap: 10px; margin-bottom: 12px;
+  }
+  .batch-stat {
+    background: var(--white); border: 1px solid var(--gray-bdr); border-radius: 10px;
+    padding: 12px 14px; text-align: center;
+  }
+  .batch-stat-value { font-size: 22px; font-weight: 900; letter-spacing: -0.5px; }
+  .batch-stat-label { font-size: 10px; color: var(--gray-mid); font-weight: 700; text-transform: uppercase; letter-spacing: 0.8px; margin-top: 3px; }
+  .batch-stat.green .batch-stat-value { color: var(--green); }
+  .batch-stat.yellow .batch-stat-value { color: var(--yellow); }
+  .batch-stat.red .batch-stat-value { color: var(--red); }
+  .batch-stat.navy .batch-stat-value { color: var(--navy); font-size: 17px; }
+  .batch-table-wrap { overflow-x: auto; border-radius: 10px; border: 1px solid var(--gray-bdr); margin-bottom: 10px; background: var(--white); }
+  .batch-table { width: 100%; border-collapse: collapse; font-size: 12px; font-family: var(--font); min-width: 580px; }
+  .batch-table th { padding: 9px 12px; font-size: 10px; text-transform: uppercase; letter-spacing: 1px; color: var(--gray-mid); font-weight: 900; border-bottom: 2px solid var(--gray-bdr); background: var(--gray-bg); text-align: left; white-space: nowrap; }
+  .batch-table th:nth-child(n+5) { text-align: right; }
+  .batch-table td { padding: 9px 12px; border-bottom: 1px solid var(--gray-bg); vertical-align: middle; }
+  .batch-table td:nth-child(n+5) { text-align: right; font-weight: 900; }
+  .batch-table tr:last-child td { border-bottom: none; }
+  .batch-table tr.row-kopen { border-left: 3px solid var(--green); }
+  .batch-table tr.row-opletten { border-left: 3px solid #f59e0b; }
+  .batch-table tr.row-skip { border-left: 3px solid var(--gray-bdr); opacity: 0.65; }
+  .batch-kenteken { font-family: 'Courier New', monospace; font-weight: 900; letter-spacing: 2px; font-size: 11px; color: var(--navy); }
+  .batch-model { font-weight: 700; color: var(--gray-dk); font-size: 12px; }
+  .batch-sub { font-size: 10px; color: var(--gray-mid); font-weight: 600; margin-top: 1px; }
+  .adv-badge { display: inline-block; padding: 3px 9px; border-radius: 20px; font-size: 10px; font-weight: 900; text-transform: uppercase; letter-spacing: 0.5px; white-space: nowrap; }
+  .adv-kopen { background: var(--green-lt); color: var(--green); }
+  .adv-opletten { background: var(--yellow-lt); color: var(--yellow); }
+  .adv-skip { background: var(--gray-bg); color: var(--gray-mid); border: 1px solid var(--gray-bdr); }
+  .marge-pos { color: var(--green); }
+  .marge-neg { color: var(--red); }
+  .marge-low { color: var(--yellow); }
 </style>
 </head>
 <body>
@@ -391,6 +429,9 @@
     </button>
     <button class="tab-btn" onclick="switchTab('link',this)">
       <span class="tab-icon">🔗</span>Link
+    </button>
+    <button class="tab-btn" onclick="switchTab('lijst',this)">
+      <span class="tab-icon">📋</span>Lijst
     </button>
   </div>
 
@@ -470,6 +511,24 @@ Schade: Kleine deuk achterportier links"></textarea>
         <button class="preset-btn" style="font-family:var(--font);letter-spacing:0;font-size:11px;" onclick="fillLink('https://autorola.nl/car/BMW_520d_2019')">Autorola</button>
       </div>
       <button class="btn-primary btn-full" onclick="runAnalysis('link')">⚡ Analyseer</button>
+    </div>
+  </div>
+
+  <!-- LIJST -->
+  <div id="tab-lijst" class="panel">
+    <div class="card">
+      <div class="card-title">📋 Veilinglijst of voertuigenbestand uploaden</div>
+      <div class="upload-zone" id="batch-upload-zone" onclick="simulateBatchUpload()">
+        <div class="upload-icon">📂</div>
+        <div class="upload-text"><strong>Klik om een bestand te uploaden</strong><br>.xlsx · .csv · .pdf &nbsp;—&nbsp; BCA · Autorola · Belcar · eigen export</div>
+      </div>
+      <div class="presets" style="margin-top:12px;">
+        <span class="preset-label">Voorbeeld:</span>
+        <button class="preset-btn" style="font-family:var(--font);letter-spacing:0;font-size:11px;" onclick="simulateBatchUpload('bca')">BCA Week 19</button>
+        <button class="preset-btn" style="font-family:var(--font);letter-spacing:0;font-size:11px;" onclick="simulateBatchUpload('autorola')">Autorola export</button>
+        <button class="preset-btn" style="font-family:var(--font);letter-spacing:0;font-size:11px;" onclick="simulateBatchUpload('eigen')">Eigen CSV</button>
+      </div>
+      <button class="btn-primary btn-full" id="batch-analyze-btn" onclick="runAnalysis('lijst')" style="margin-top:12px;" disabled>📋 Upload een bestand om te analyseren</button>
     </div>
   </div>
 
@@ -579,6 +638,11 @@ function runAnalysis(type) {
       [{id:'fetch',icon:'🌐',label:'Pagina ophalen...',dur:700},{id:'parse',icon:'🔍',label:'Voertuigdata extraheren...',dur:800},{id:'atx',icon:'📈',label:'Autotelex Pro...',dur:700},{id:'ai',icon:'🤖',label:'AI schade-analyse...',dur:1000},{id:'rep',icon:'📋',label:'Rapport samenstellen...',dur:350}],
       'Link analyseren...',
       showLinkResult
+    ],
+    lijst: [
+      [{id:'read',icon:'📂',label:'Bestand inlezen...',dur:700},{id:'parse',icon:'🔍',label:'25 voertuigen herkend...',dur:600},{id:'rdw',icon:'🏛️',label:'RDW batch opzoeken...',dur:900},{id:'atx',icon:'📈',label:'Autotelex Pro · JP.cars...',dur:1100},{id:'ai',icon:'🤖',label:'CarWatch AI prioriteert...',dur:1000},{id:'rep',icon:'📋',label:'Lijst samenstellen...',dur:400}],
+      'Veilinglijst analyseren (25 voertuigen)...',
+      showBatchResult
     ]
   };
   const [s, t, fn] = handlers[type];
@@ -773,6 +837,121 @@ function showLinkResult() {
       <div class="ai-text">
         <p>Huidig bod <span class="hl-yellow">€ 15.100</span> met 7 bieders actief. Autotelex Pro en Cars2Click bevestigen een marktwaarde van <span class="hl-blue">€ 15.900 – 16.100</span>. Inkoopadvies na schadeaftrek: <span class="hl-green">€ 15.500</span>. Er is nog <span class="hl-green">€ 400 speelruimte</span>.</p>
         <p><strong>Advies:</strong> Volg dit lot. Maximaal bieden tot <span class="hl-green">€ 15.500</span>. Daarboven: laten lopen.</p>
+      </div>
+    </div>`);
+}
+
+// ─── BATCH / LIJST ───
+const BATCH_DATA = [
+  {kt:'9-XKP-14', model:'BMW 520d xDrive Touring', jaar:2019, km:'142.000', vraag:16500, inkoop:15800, marge:2700, adv:'kopen', schade:'Licht'},
+  {kt:'G-441-ZB', model:'Audi A4 Avant 2.0 TFSI', jaar:2020, km:'98.000', vraag:19800, inkoop:20400, marge:2100, adv:'kopen', schade:'Geen'},
+  {kt:'V-564-RG', model:'Ford Transit Custom L2', jaar:2020, km:'156.000', vraag:14500, inkoop:15100, marge:3200, adv:'kopen', schade:'Licht'},
+  {kt:'X-229-BT', model:'Toyota Yaris 1.5 Hybrid', jaar:2021, km:'67.000', vraag:14200, inkoop:15800, marge:2400, adv:'kopen', schade:'Geen'},
+  {kt:'Y-114-GK', model:'Toyota Proace Verso 2.0D', jaar:2021, km:'87.000', vraag:24600, inkoop:25800, marge:3400, adv:'kopen', schade:'Geen'},
+  {kt:'R-319-KF', model:'Volvo XC60 D4 AWD', jaar:2019, km:'134.000', vraag:22500, inkoop:23400, marge:2900, adv:'kopen', schade:'Licht'},
+  {kt:'B-447-XR', model:'Honda CR-V 1.5T AWD', jaar:2020, km:'88.000', vraag:21900, inkoop:22800, marge:2600, adv:'kopen', schade:'Geen'},
+  {kt:'F-663-LM', model:'Nissan Qashqai 1.3 DIG-T', jaar:2021, km:'74.000', vraag:17600, inkoop:18400, marge:2200, adv:'kopen', schade:'Geen'},
+  {kt:'D-758-NK', model:'Hyundai Tucson 1.6 T-GDI', jaar:2020, km:'109.000', vraag:18700, inkoop:19500, marge:2500, adv:'kopen', schade:'Licht'},
+  {kt:'W-891-ST', model:'Citroën Berlingo XL 1.5 dCi', jaar:2020, km:'143.000', vraag:13800, inkoop:14700, marge:2800, adv:'kopen', schade:'Licht'},
+  {kt:'Z-447-HG', model:'Volkswagen Golf 1.5 TSI', jaar:2021, km:'56.000', vraag:16900, inkoop:17800, marge:2300, adv:'kopen', schade:'Geen'},
+  {kt:'E-318-TL', model:'Ford Kuga 2.0 EcoBlue ST-Line', jaar:2020, km:'132.000', vraag:17200, inkoop:18100, marge:2600, adv:'kopen', schade:'Licht'},
+  {kt:'T-823-NH', model:'VW Passat Variant 2.0 TDI', jaar:2018, km:'187.000', vraag:11200, inkoop:9800, marge:1400, adv:'opletten', schade:'Matig'},
+  {kt:'N-388-KL', model:'Peugeot 3008 1.6 THP', jaar:2018, km:'201.000', vraag:12400, inkoop:11100, marge:900, adv:'opletten', schade:'Matig'},
+  {kt:'H-774-VP', model:'Renault Mégane 1.5 dCi', jaar:2018, km:'178.000', vraag:8900, inkoop:7600, marge:800, adv:'opletten', schade:'Matig'},
+  {kt:'J-112-WB', model:'SEAT León 2.0 TDI FR', jaar:2018, km:'166.000', vraag:9200, inkoop:8100, marge:600, adv:'opletten', schade:'Matig'},
+  {kt:'L-339-PH', model:'Kia Sportage 1.6 GDI', jaar:2019, km:'147.000', vraag:15300, inkoop:14200, marge:1100, adv:'opletten', schade:'Licht'},
+  {kt:'C-224-FJ', model:'BMW 318i Touring', jaar:2018, km:'193.000', vraag:12600, inkoop:10900, marge:400, adv:'opletten', schade:'Matig'},
+  {kt:'A-775-BX', model:'Peugeot 308 SW 1.5 BlueHDi', jaar:2019, km:'158.000', vraag:10300, inkoop:9200, marge:700, adv:'opletten', schade:'Matig'},
+  {kt:'P-881-ZN', model:'Skoda Octavia 2.0 TDI', jaar:2019, km:'121.000', vraag:14800, inkoop:13200, marge:1100, adv:'opletten', schade:'Licht'},
+  {kt:'K-117-PX', model:'Mercedes-Benz C220 CDI', jaar:2017, km:'224.000', vraag:13900, inkoop:10200, marge:-200, adv:'skip', schade:'Zwaar'},
+  {kt:'M-556-TG', model:'Opel Astra 1.6 CDTI', jaar:2017, km:'212.000', vraag:7400, inkoop:5800, marge:-300, adv:'skip', schade:'Matig'},
+  {kt:'Q-623-RW', model:'Mercedes-Benz Vito 116 CDI', jaar:2019, km:'178.000', vraag:18400, inkoop:15600, marge:-600, adv:'skip', schade:'Zwaar'},
+  {kt:'S-562-MV', model:'Audi Q3 35 TFSI S-line', jaar:2020, km:'91.000', vraag:22100, inkoop:21300, marge:-400, adv:'skip', schade:'Matig'},
+  {kt:'U-887-QP', model:'Renault Zoé R135 EV', jaar:2022, km:'48.000', vraag:19200, inkoop:18400, marge:-100, adv:'skip', schade:'Licht'},
+];
+
+let batchLoaded = false;
+let batchFileName = '';
+
+function simulateBatchUpload(type) {
+  const zone = document.getElementById('batch-upload-zone');
+  const btn = document.getElementById('batch-analyze-btn');
+  const names = { bca:'BCA_Veilinglijst_Week19.xlsx', autorola:'Autorola_Export_2026-05.xlsx', eigen:'Eigen_Inkooplijst_mei.csv' };
+  batchFileName = names[type] || 'BCA_Veilinglijst_Week19.xlsx';
+  zone.classList.add('has-file');
+  zone.innerHTML = `<div class="upload-icon">✅</div><div class="upload-text"><strong>${batchFileName}</strong><br>25 voertuigen herkend · Klaar voor analyse</div>`;
+  btn.disabled = false;
+  btn.textContent = '';
+  btn.innerHTML = '⚡ Analyseer alle 25 voertuigen';
+  batchLoaded = true;
+}
+
+function showBatchResult() {
+  const kopenCars = BATCH_DATA.filter(c => c.adv === 'kopen');
+  const oplettenCars = BATCH_DATA.filter(c => c.adv === 'opletten');
+  const skipCars = BATCH_DATA.filter(c => c.adv === 'skip');
+  const totalMarge = kopenCars.reduce((s, c) => s + c.marge, 0);
+
+  const fmt = n => '€ ' + n.toLocaleString('nl-NL');
+  const margeClass = m => m >= 2000 ? 'marge-pos' : m >= 500 ? 'marge-low' : 'marge-neg';
+  const advBadge = a => a === 'kopen'
+    ? '<span class="adv-badge adv-kopen">✅ Kopen</span>'
+    : a === 'opletten'
+    ? '<span class="adv-badge adv-opletten">⚠️ Opletten</span>'
+    : '<span class="adv-badge adv-skip">❌ Skip</span>';
+
+  const row = c => `
+    <tr class="row-${c.adv}">
+      <td><span class="batch-kenteken">${c.kt}</span></td>
+      <td><div class="batch-model">${c.model}</div><div class="batch-sub">${c.jaar} · ${c.km} km · ${c.schade} schade</div></td>
+      <td class="batch-col-jaar">${c.jaar}</td>
+      <td>${fmt(c.vraag)}</td>
+      <td class="batch-col-inkoop">${fmt(c.inkoop)}</td>
+      <td class="${margeClass(c.marge)}">${c.marge >= 0 ? '+' : ''}${fmt(c.marge)}</td>
+      <td>${advBadge(c.adv)}</td>
+    </tr>`;
+
+  showResult(`
+    <div class="result-header">
+      <div class="rh-top">
+        <div>
+          <div class="vehicle-title">${batchFileName || 'Veilinglijst'}</div>
+          <div class="vehicle-subtitle">25 voertuigen geanalyseerd · Gesorteerd op prioriteit</div>
+        </div>
+      </div>
+      <div class="tags">
+        <span class="tag">📋 Batch analyse</span>
+        <span class="tag">RDW · JP.cars · Autotelex Pro</span>
+        <span class="tag">CarWatch AI</span>
+      </div>
+    </div>
+    <div class="batch-summary">
+      <div class="batch-stat green"><div class="batch-stat-value">${kopenCars.length}</div><div class="batch-stat-label">✅ Kopen</div></div>
+      <div class="batch-stat yellow"><div class="batch-stat-value">${oplettenCars.length}</div><div class="batch-stat-label">⚠️ Opletten</div></div>
+      <div class="batch-stat red"><div class="batch-stat-value">${skipCars.length}</div><div class="batch-stat-label">❌ Skip</div></div>
+      <div class="batch-stat navy"><div class="batch-stat-value">${fmt(totalMarge)}</div><div class="batch-stat-label">Totale marge (kopen)</div></div>
+    </div>
+    <div class="batch-table-wrap">
+      <table class="batch-table">
+        <thead><tr>
+          <th>Kenteken</th>
+          <th>Voertuig</th>
+          <th class="batch-col-jaar-h">Jaar</th>
+          <th style="text-align:right">Vraagprijs</th>
+          <th class="batch-col-inkoop-h" style="text-align:right">Inkoopadvies</th>
+          <th style="text-align:right">Marge</th>
+          <th>Advies</th>
+        </tr></thead>
+        <tbody>
+          ${[...kopenCars, ...oplettenCars, ...skipCars].map(row).join('')}
+        </tbody>
+      </table>
+    </div>
+    <div class="ai-card">
+      <div class="ai-card-header"><div class="ai-icon">${aiIconSVG}</div><div><div class="ai-card-header-title">CarWatch AI Prioriteringsanalyse</div><div class="ai-card-header-sub">RDW · JP.cars · Autotelex Pro · ANWB · CarWatch AI</div></div></div>
+      <div class="ai-text">
+        <p>Van de <span class="hl-blue">25 voertuigen</span> in deze lijst zijn er <span class="hl-green">${kopenCars.length} direct interessant</span> met een gecombineerde margeruimte van <span class="hl-green">${fmt(totalMarge)}</span>. De Toyota Proace Verso en de Ford Transit Custom springen eruit als beste kansen — lage schade, goede km-stand en Autotelex Pro-taxatie boven vraagprijs.</p>
+        <p><span class="hl-yellow">${oplettenCars.length} voertuigen</span> verdienen nader onderzoek: de marges zijn krap of de schade-omschrijving is onvolledig. Laat een fysieke inspectie de doorslag geven. De <span class="hl-red">${skipCars.length} skip-voertuigen</span> hebben negatieve marge of zware schade — bij huidig prijsniveau niet rendabel.</p>
       </div>
     </div>`);
 }
