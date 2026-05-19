@@ -827,27 +827,27 @@ function buildPhotoSection(type) {
   if (type === 'pdf') {
     return `
       <div class="data-card" style="margin-bottom:10px;">
-        <div class="data-card-title">📷 Foto's uit schaderapport <span style="color:var(--gray-mid);font-weight:400;font-size:10px;margin-left:6px;">5 foto's bijgevoegd</span></div>
+        <div class="data-card-title">📷 Foto's uit schaderapport <span style="color:var(--gray-mid);font-weight:400;font-size:10px;margin-left:6px;">10 schadelocaties gefotografeerd</span></div>
         <div class="photo-grid-main">
           <div class="photo-wrap span-col">
             <img src="https://picsum.photos/seed/bmwext1/800/600" alt="Exterieur">
             <div class="photo-tag">Overzicht exterieur</div>
           </div>
           <div class="photo-wrap">
-            <img src="https://picsum.photos/seed/dmgdoor/400/300" alt="Achterportier">
-            <div class="photo-tag dmg">Achterportier L</div>
+            <img src="https://picsum.photos/seed/dmgdoor/400/300" alt="Scherm V L">
+            <div class="photo-tag dmg">Scherm V L</div>
           </div>
           <div class="photo-wrap">
-            <img src="https://picsum.photos/seed/dmgfender/400/300" alt="Rechterachterscherm">
-            <div class="photo-tag dmg">Rechterachterscherm</div>
+            <img src="https://picsum.photos/seed/dmgfender/400/300" alt="Deur V L">
+            <div class="photo-tag dmg">Deur V L</div>
           </div>
           <div class="photo-wrap">
-            <img src="https://picsum.photos/seed/dmgbumper/400/300" alt="Voorbumper">
-            <div class="photo-tag warn">Voorbumper</div>
+            <img src="https://picsum.photos/seed/dmgbumper/400/300" alt="Scherm A R">
+            <div class="photo-tag dmg">Scherm A R</div>
           </div>
           <div class="photo-wrap">
-            <img src="https://picsum.photos/seed/dmgseat/400/300" alt="Bestuurdersstoel">
-            <div class="photo-tag warn">Bestuurdersstoel</div>
+            <img src="https://picsum.photos/seed/dmgseat/400/300" alt="Bumper V">
+            <div class="photo-tag warn">Bumper V</div>
           </div>
         </div>
       </div>`;
@@ -884,13 +884,13 @@ function showPdfResult() {
   showResult(`
     <div class="result-header">
       <div class="rh-top">
-        <div><div class="vehicle-title">Schadeanalyse — BMW 520d xDrive</div><div class="vehicle-subtitle">BCA_Schaderapport_9XKP14.pdf · 3 pagina's · 9 schadeposten</div></div>
+        <div><div class="vehicle-title">Schadeanalyse — Kia Ceed 1.0 T-GDI ExecutiveLine</div><div class="vehicle-subtitle">Schaderapport_X397PV.pdf · 3 pagina's · 10 schadeposten</div></div>
         <div class="verdicts">
-          <div class="verdict-badge" style="background:rgba(180,83,9,0.2);border-color:rgba(180,83,9,0.4);"><div class="verdict-label">Totale schade</div><div class="verdict-price" style="color:#fcd34d;">€ 1.840</div></div>
-          <div class="verdict-badge" style="background:rgba(220,38,38,0.15);border-color:rgba(220,38,38,0.3);"><div class="verdict-label">Inkoopadvies</div><div class="verdict-price" style="color:#fca5a5;">€ 14.200</div></div>
+          <div class="verdict-badge" style="background:rgba(180,83,9,0.2);border-color:rgba(180,83,9,0.4);"><div class="verdict-label">Totale schade</div><div class="verdict-price" style="color:#fcd34d;">€ 2.880</div></div>
+          <div class="verdict-badge" style="background:rgba(220,38,38,0.15);border-color:rgba(220,38,38,0.3);"><div class="verdict-label">Inkoopadvies</div><div class="verdict-price" style="color:#fca5a5;">€ 12.400</div></div>
         </div>
       </div>
-      <div class="tags"><span class="tag">📄 PDF gescand</span><span class="tag">9-XKP-14</span><span class="tag">BCA rapport</span></div>
+      <div class="tags"><span class="tag">📄 PDF gescand</span><span class="tag">X-397-PV</span><span class="tag">Kia Ceed · 2024</span><span class="tag">63.531 km</span></div>
     </div>
     ${sourcesPills(['RDW','Autotelex Pro','CarWatch AI'])}
     <div class="data-card" style="margin-bottom:10px;">
@@ -898,25 +898,26 @@ function showPdfResult() {
       <table class="damage-table">
         <thead><tr><th>Omschrijving</th><th>Locatie</th><th>Ernst</th><th style="text-align:right">Kosten</th></tr></thead>
         <tbody>
-          <tr><td>Deuk met lakschade</td><td>Achterportier L</td><td><span class="sev sev-medium">Matig</span></td><td style="text-align:right;font-weight:900">€ 480</td></tr>
-          <tr><td>Krasjes schuifschade</td><td>Voorbumper</td><td><span class="sev sev-low">Licht</span></td><td style="text-align:right;font-weight:900">€ 220</td></tr>
-          <tr><td>Steenslag lak</td><td>Motorkap</td><td><span class="sev sev-low">Licht</span></td><td style="text-align:right;font-weight:900">€ 95</td></tr>
-          <tr><td>Krassen velg</td><td>Linksachter 18"</td><td><span class="sev sev-low">Licht</span></td><td style="text-align:right;font-weight:900">€ 180</td></tr>
-          <tr><td>Deuk zonder lak</td><td>Rechterachterscherm</td><td><span class="sev sev-medium">Matig</span></td><td style="text-align:right;font-weight:900">€ 320</td></tr>
-          <tr><td>Gebruiksschade bekleding</td><td>Bestuurdersstoel</td><td><span class="sev sev-low">Licht</span></td><td style="text-align:right;font-weight:900">€ 150</td></tr>
-          <tr><td>Krasschade kofferdeksel</td><td>Achterkant</td><td><span class="sev sev-medium">Matig</span></td><td style="text-align:right;font-weight:900">€ 260</td></tr>
-          <tr><td>Binnenspiegel los</td><td>Interieur</td><td><span class="sev sev-low">Licht</span></td><td style="text-align:right;font-weight:900">€ 85</td></tr>
-          <tr><td>Spatbord deuken</td><td>Voorspatbord R</td><td><span class="sev sev-low">Licht</span></td><td style="text-align:right;font-weight:900">€ 50</td></tr>
+          <tr><td>Deuk(en) en kras(sen)</td><td>Scherm V L</td><td><span class="sev sev-medium">Matig</span></td><td style="text-align:right;font-weight:900">€ 480</td></tr>
+          <tr><td>Deuk(en) en kras(sen)</td><td>Deur V L</td><td><span class="sev sev-medium">Matig</span></td><td style="text-align:right;font-weight:900">€ 420</td></tr>
+          <tr><td>Deuk(en) en kras(sen)</td><td>Deur V R</td><td><span class="sev sev-medium">Matig</span></td><td style="text-align:right;font-weight:900">€ 350</td></tr>
+          <tr><td>Deuk(en) en kras(sen)</td><td>Scherm A R</td><td><span class="sev sev-medium">Matig</span></td><td style="text-align:right;font-weight:900">€ 380</td></tr>
+          <tr><td>Kras(sen)</td><td>Deur A L</td><td><span class="sev sev-low">Licht</span></td><td style="text-align:right;font-weight:900">€ 280</td></tr>
+          <tr><td>Kras(sen)</td><td>Deur A R</td><td><span class="sev sev-low">Licht</span></td><td style="text-align:right;font-weight:900">€ 260</td></tr>
+          <tr><td>Kras(sen)</td><td>Bumper V</td><td><span class="sev sev-low">Licht</span></td><td style="text-align:right;font-weight:900">€ 220</td></tr>
+          <tr><td>Kras(sen)</td><td>Bumper A</td><td><span class="sev sev-low">Licht</span></td><td style="text-align:right;font-weight:900">€ 190</td></tr>
+          <tr><td>Kras(sen)</td><td>Dorpel R</td><td><span class="sev sev-low">Licht</span></td><td style="text-align:right;font-weight:900">€ 180</td></tr>
+          <tr><td>Reinigen interieur</td><td>Interieur</td><td><span class="sev sev-low">Licht</span></td><td style="text-align:right;font-weight:900">€ 120</td></tr>
         </tbody>
       </table>
-      <div class="damage-total"><span style="color:var(--gray-mid);font-size:11px;font-weight:700;">Totaal herstelkosten</span><span style="color:var(--red);font-size:17px;font-weight:900;">€ 1.840</span></div>
+      <div class="damage-total"><span style="color:var(--gray-mid);font-size:11px;font-weight:700;">Totaal herstelkosten</span><span style="color:var(--red);font-size:17px;font-weight:900;">€ 2.880</span></div>
     </div>
     ${buildPhotoSection('pdf')}
     <div class="ai-card">
       <div class="ai-card-header"><div class="ai-icon">${aiIconSVG}</div><div><div class="ai-card-header-title">AI Schade-interpretatie</div><div class="ai-card-header-sub">CarWatch AI · OCR + Autotelex Pro schadeclassificatie</div></div></div>
       <div class="ai-text">
-        <p>Het rapport toont <span class="hl-red">9 schadeposten</span> met een totale raming van <span class="hl-red">€ 1.840</span> — <span class="hl-red">€ 1.290 meer</span> dan de verbale beschrijving suggereerde. Autotelex Pro classificeert de schade op schadegraad 2 (cosmetisch, geen structurele issues).</p>
-        <p><strong>Advies:</strong> Inkoopadvies zakt naar <span class="hl-red">€ 14.200</span>. Dit is waarom je altijd het schaderapport analyseert.</p>
+        <p>Het rapport toont <span class="hl-red">10 schadeposten</span> verspreid over het volledige exterieur — linkerzijde het zwaarst getroffen (Scherm V L + Deur V L met deuken). Totale raming <span class="hl-red">€ 2.880</span>. Autotelex Pro classificeert dit als schadegraad 2 (cosmetisch, geen structurele schade). Onderhoud staat open.</p>
+        <p><strong>Advies:</strong> Inkoopadvies na schadeaftrek: <span class="hl-red">€ 12.400</span>. Let op: onderhoud uitvoeren is een extra post. Reken €250–400 onderhoud mee vóór doorverkoop.</p>
       </div>
     </div>`);
 }
