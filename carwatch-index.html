@@ -1,0 +1,889 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CarWatch — Elke aangeboden auto doorgelicht in 30 seconden</title>
+<style>
+  :root {
+    --navy:     #0F4C81;
+    --navy-dk:  #0a3660;
+    --navy-md:  #1a5e9a;
+    --blue-lt:  #7DA8D0;
+    --blue-pale:#e8f1f9;
+    --blue-xlt: #f0f6fc;
+    --white:    #ffffff;
+    --gray-bg:  #f5f7fa;
+    --gray-bdr: #dde4ed;
+    --gray-mid: #8a97a8;
+    --gray-dk:  #444c5a;
+    --text:     #111827;
+    --green:    #16a34a;
+    --font: 'Futura','Century Gothic','Trebuchet MS',sans-serif;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: var(--white);
+    color: var(--text);
+    font-family: var(--font);
+    font-size: 15px;
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* ─── NAV ─── */
+  nav {
+    background: var(--navy);
+    padding: 0 24px;
+    height: 58px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    box-shadow: 0 2px 12px rgba(15,76,129,0.3);
+  }
+
+  .nav-logo {
+    display: flex;
+    align-items: center;
+    gap: 9px;
+    text-decoration: none;
+  }
+
+  .nav-wordmark {
+    font-weight: 900;
+    font-size: 15px;
+    color: white;
+    letter-spacing: -0.3px;
+    line-height: 1;
+  }
+
+  .nav-product {
+    color: var(--blue-lt);
+    font-weight: 700;
+    font-size: 13px;
+    letter-spacing: 0.5px;
+    margin-left: 4px;
+  }
+
+  .nav-divider {
+    width: 1px; height: 20px;
+    background: rgba(255,255,255,0.2);
+    margin: 0 4px;
+  }
+
+  .nav-cta {
+    background: white;
+    color: var(--navy);
+    border: none;
+    border-radius: 6px;
+    padding: 9px 18px;
+    font-size: 12px;
+    font-weight: 900;
+    font-family: var(--font);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    cursor: pointer;
+    text-decoration: none;
+    display: inline-block;
+    transition: all 0.15s;
+    white-space: nowrap;
+  }
+
+  .nav-cta:hover { background: var(--blue-pale); }
+
+  /* ─── HERO ─── */
+  .hero {
+    background: linear-gradient(150deg, var(--navy) 0%, #1a6aad 100%);
+    color: white;
+    padding: 60px 24px 56px;
+    text-align: center;
+  }
+
+  .hero-eyebrow {
+    font-size: 11px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--blue-lt);
+    font-weight: 700;
+    margin-bottom: 16px;
+  }
+
+  .hero h1 {
+    font-size: clamp(26px, 5vw, 46px);
+    font-weight: 900;
+    letter-spacing: -1px;
+    line-height: 1.15;
+    margin-bottom: 16px;
+    max-width: 680px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  .hero h1 em {
+    font-style: normal;
+    color: var(--blue-lt);
+  }
+
+  .hero p {
+    font-size: clamp(14px, 2.5vw, 17px);
+    color: rgba(255,255,255,0.72);
+    max-width: 520px;
+    margin: 0 auto 32px;
+    line-height: 1.65;
+    font-weight: 500;
+  }
+
+  .hero-btns {
+    display: flex;
+    gap: 12px;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+
+  .btn-hero {
+    background: white;
+    color: var(--navy);
+    border: none;
+    border-radius: 8px;
+    padding: 14px 28px;
+    font-size: 14px;
+    font-weight: 900;
+    font-family: var(--font);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    cursor: pointer;
+    text-decoration: none;
+    display: inline-block;
+    transition: all 0.15s;
+    box-shadow: 0 4px 16px rgba(0,0,0,0.15);
+  }
+
+  .btn-hero:hover { background: var(--blue-pale); transform: translateY(-2px); }
+
+  .btn-hero-outline {
+    background: transparent;
+    color: white;
+    border: 2px solid rgba(255,255,255,0.4);
+    border-radius: 8px;
+    padding: 13px 24px;
+    font-size: 13px;
+    font-weight: 700;
+    font-family: var(--font);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    cursor: pointer;
+    text-decoration: none;
+    display: inline-block;
+    transition: all 0.15s;
+  }
+
+  .btn-hero-outline:hover { border-color: white; background: rgba(255,255,255,0.08); }
+
+  /* ─── TRUST BAR ─── */
+  .trust-bar {
+    background: var(--gray-bg);
+    border-top: 1px solid var(--gray-bdr);
+    border-bottom: 1px solid var(--gray-bdr);
+    padding: 16px 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    flex-wrap: wrap;
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--gray-mid);
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+  }
+
+  .trust-item {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    color: var(--gray-dk);
+    white-space: nowrap;
+  }
+
+  .trust-dot { color: var(--gray-bdr); font-size: 8px; }
+
+  /* ─── SECTION ─── */
+  .section { padding: 56px 24px; max-width: 960px; margin: 0 auto; }
+  .section-center { text-align: center; }
+
+  .section-label {
+    font-size: 10px;
+    font-weight: 900;
+    text-transform: uppercase;
+    letter-spacing: 2.5px;
+    color: var(--blue-lt);
+    margin-bottom: 10px;
+  }
+
+  .section-title {
+    font-size: clamp(22px, 4vw, 32px);
+    font-weight: 900;
+    letter-spacing: -0.5px;
+    line-height: 1.2;
+    color: var(--navy);
+    margin-bottom: 12px;
+  }
+
+  .section-sub {
+    font-size: 15px;
+    color: var(--gray-mid);
+    max-width: 540px;
+    margin: 0 auto 40px;
+    line-height: 1.65;
+    font-weight: 500;
+  }
+
+  /* ─── USE CASES ─── */
+  .usecases {
+    background: var(--gray-bg);
+    padding: 56px 24px;
+    border-top: 1px solid var(--gray-bdr);
+    border-bottom: 1px solid var(--gray-bdr);
+  }
+
+  .usecases-inner { max-width: 960px; margin: 0 auto; }
+
+  .usecase-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(210px, 1fr));
+    gap: 14px;
+    margin-top: 36px;
+  }
+
+  .usecase-card {
+    background: white;
+    border: 1px solid var(--gray-bdr);
+    border-radius: 10px;
+    padding: 22px 20px;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.05);
+    transition: all 0.2s;
+  }
+
+  .usecase-card:hover {
+    border-color: var(--blue-lt);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(15,76,129,0.1);
+  }
+
+  .usecase-icon {
+    font-size: 28px;
+    margin-bottom: 12px;
+    display: block;
+  }
+
+  .usecase-title {
+    font-weight: 900;
+    font-size: 14px;
+    color: var(--navy);
+    margin-bottom: 6px;
+    letter-spacing: -0.2px;
+  }
+
+  .usecase-desc {
+    font-size: 12px;
+    color: var(--gray-mid);
+    line-height: 1.6;
+    font-weight: 500;
+  }
+
+  /* ─── HOW IT WORKS ─── */
+  .steps {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 0;
+    margin-top: 40px;
+    position: relative;
+  }
+
+  .step {
+    text-align: center;
+    padding: 24px 20px;
+    position: relative;
+  }
+
+  .step-num {
+    width: 44px; height: 44px;
+    background: var(--navy);
+    color: white;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-weight: 900;
+    font-size: 16px;
+    margin: 0 auto 14px;
+  }
+
+  .step-title {
+    font-weight: 900;
+    font-size: 14px;
+    color: var(--navy);
+    margin-bottom: 6px;
+  }
+
+  .step-desc {
+    font-size: 12px;
+    color: var(--gray-mid);
+    line-height: 1.6;
+    font-weight: 500;
+  }
+
+  /* ─── SOURCES ─── */
+  .sources-section {
+    background: var(--navy);
+    padding: 56px 24px;
+    color: white;
+  }
+
+  .sources-inner { max-width: 960px; margin: 0 auto; }
+
+  .sources-label {
+    font-size: 10px;
+    font-weight: 900;
+    letter-spacing: 2.5px;
+    text-transform: uppercase;
+    color: var(--blue-lt);
+    margin-bottom: 10px;
+    text-align: center;
+  }
+
+  .sources-title {
+    font-size: clamp(20px, 3.5vw, 28px);
+    font-weight: 900;
+    text-align: center;
+    margin-bottom: 8px;
+    letter-spacing: -0.3px;
+  }
+
+  .sources-sub {
+    font-size: 14px;
+    color: rgba(255,255,255,0.6);
+    text-align: center;
+    margin-bottom: 36px;
+    font-weight: 500;
+  }
+
+  .sources-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 12px;
+  }
+
+  .source-card {
+    background: rgba(255,255,255,0.07);
+    border: 1px solid rgba(255,255,255,0.12);
+    border-radius: 10px;
+    padding: 18px 16px;
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    transition: all 0.2s;
+  }
+
+  .source-card:hover {
+    background: rgba(255,255,255,0.11);
+    border-color: rgba(255,255,255,0.22);
+  }
+
+  .source-icon { font-size: 22px; flex-shrink: 0; margin-top: 1px; }
+
+  .source-name {
+    font-weight: 900;
+    font-size: 13px;
+    margin-bottom: 3px;
+    letter-spacing: -0.1px;
+  }
+
+  .source-desc {
+    font-size: 11px;
+    color: rgba(255,255,255,0.55);
+    font-weight: 500;
+    line-height: 1.5;
+  }
+
+  /* ─── FEATURES ─── */
+  .features-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(270px, 1fr));
+    gap: 16px;
+    margin-top: 40px;
+  }
+
+  .feature-card {
+    background: var(--white);
+    border: 1px solid var(--gray-bdr);
+    border-radius: 10px;
+    padding: 22px 20px;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.04);
+  }
+
+  .feature-top {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 10px;
+  }
+
+  .feature-icon-box {
+    width: 36px; height: 36px;
+    background: var(--blue-pale);
+    border-radius: 8px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 17px;
+    flex-shrink: 0;
+  }
+
+  .feature-title {
+    font-weight: 900;
+    font-size: 14px;
+    color: var(--navy);
+    letter-spacing: -0.2px;
+  }
+
+  .feature-desc {
+    font-size: 13px;
+    color: var(--gray-mid);
+    line-height: 1.65;
+    font-weight: 500;
+  }
+
+  /* ─── INVOER METHODES ─── */
+  .input-methods {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+    margin-top: 36px;
+  }
+
+  .method-card {
+    background: var(--blue-xlt);
+    border: 1.5px solid var(--gray-bdr);
+    border-radius: 10px;
+    padding: 18px 16px;
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    transition: all 0.15s;
+  }
+
+  .method-card:hover { border-color: var(--navy); }
+
+  .method-icon { font-size: 24px; flex-shrink: 0; }
+
+  .method-title {
+    font-weight: 900;
+    font-size: 13px;
+    color: var(--navy);
+    margin-bottom: 3px;
+  }
+
+  .method-desc {
+    font-size: 11px;
+    color: var(--gray-mid);
+    font-weight: 500;
+    line-height: 1.5;
+  }
+
+  /* ─── CTA SECTION ─── */
+  .cta-section {
+    background: linear-gradient(135deg, var(--navy) 0%, var(--navy-md) 100%);
+    padding: 60px 24px;
+    text-align: center;
+    color: white;
+  }
+
+  .cta-section h2 {
+    font-size: clamp(22px, 4vw, 32px);
+    font-weight: 900;
+    letter-spacing: -0.5px;
+    margin-bottom: 12px;
+  }
+
+  .cta-section p {
+    font-size: 15px;
+    color: rgba(255,255,255,0.65);
+    margin-bottom: 28px;
+    font-weight: 500;
+  }
+
+  .cta-group {
+    display: flex;
+    gap: 12px;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+
+  .btn-white {
+    background: white;
+    color: var(--navy);
+    border: none;
+    border-radius: 8px;
+    padding: 14px 28px;
+    font-size: 13px;
+    font-weight: 900;
+    font-family: var(--font);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    cursor: pointer;
+    text-decoration: none;
+    display: inline-block;
+    transition: all 0.15s;
+  }
+
+  .btn-white:hover { background: var(--blue-pale); transform: translateY(-1px); }
+
+  .btn-ghost {
+    background: transparent;
+    color: white;
+    border: 2px solid rgba(255,255,255,0.35);
+    border-radius: 8px;
+    padding: 13px 24px;
+    font-size: 13px;
+    font-weight: 700;
+    font-family: var(--font);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    cursor: pointer;
+    text-decoration: none;
+    display: inline-block;
+    transition: all 0.15s;
+  }
+
+  .btn-ghost:hover { border-color: white; }
+
+  /* ─── FOOTER ─── */
+  footer {
+    background: var(--navy-dk);
+    color: rgba(255,255,255,0.45);
+    padding: 22px 24px;
+    text-align: center;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.3px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+  }
+
+  .footer-logo {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    margin-bottom: 4px;
+    opacity: 0.7;
+  }
+
+  footer a { color: var(--blue-lt); text-decoration: none; }
+
+  /* ─── MOBILE ─── */
+  @media (max-width: 600px) {
+    .input-methods { grid-template-columns: 1fr; }
+    .trust-bar { gap: 10px; }
+    .trust-dot { display: none; }
+    .hero { padding: 44px 20px 44px; }
+    .section { padding: 44px 20px; }
+    nav { padding: 0 16px; }
+    .nav-product { display: none; }
+    .nav-divider { display: none; }
+  }
+
+  @media (max-width: 400px) {
+    .btn-hero, .btn-hero-outline { width: 100%; text-align: center; }
+    .hero-btns { flex-direction: column; }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a class="nav-logo" href="#">
+    <svg viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg" width="26" height="26">
+      <circle cx="16" cy="11" r="4.2" fill="none" stroke="white" stroke-width="2.2"/>
+      <line x1="16" y1="15.2" x2="16" y2="30" stroke="white" stroke-width="2.2"/>
+      <line x1="16" y1="20" x2="6" y2="26.5" stroke="white" stroke-width="2"/>
+      <line x1="16" y1="20" x2="25.5" y2="15.5" stroke="white" stroke-width="2"/>
+      <line x1="16" y1="30" x2="10" y2="41" stroke="white" stroke-width="2"/>
+      <line x1="16" y1="30" x2="22" y2="41" stroke="white" stroke-width="2"/>
+      <circle cx="25.5" cy="15.5" r="3" fill="white"/>
+      <circle cx="31" cy="6" r="2.2" fill="rgba(255,255,255,0.45)"/>
+      <circle cx="36" cy="10" r="2" fill="rgba(255,255,255,0.45)"/>
+      <circle cx="38" cy="16" r="1.8" fill="rgba(255,255,255,0.45)"/>
+    </svg>
+    <span class="nav-wordmark">ai-werkers</span>
+    <span class="nav-divider"></span>
+    <span class="nav-product">CarWatch</span>
+  </a>
+  <a class="nav-cta" href="demo.html">Probeer demo →</a>
+</nav>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-eyebrow">hands-on ai voor het mkb · automotive</div>
+  <h1>Elke aangeboden auto<br>doorgelicht in <em>30 seconden</em></h1>
+  <p>Of het nou een veilingauto is, een occasion van een particulier, een inruiler of een voertuig uit een zakelijke vloot — CarWatch geeft je direct het complete beeld.</p>
+  <div class="hero-btns">
+    <a class="btn-hero" href="demo.html">⚡ Probeer de demo</a>
+    <a class="btn-hero-outline" href="mailto:rick@ai-werkers.nl?subject=CarWatch interesse">📩 Vraag een gesprek aan</a>
+  </div>
+</div>
+
+<!-- TRUST BAR -->
+<div class="trust-bar">
+  <span class="trust-item">🏛️ RDW Kentekendienst</span>
+  <span class="trust-dot">●</span>
+  <span class="trust-item">📊 JP.cars</span>
+  <span class="trust-dot">●</span>
+  <span class="trust-item">📈 Autotelex Pro</span>
+  <span class="trust-dot">●</span>
+  <span class="trust-item">📋 ANWB Koerslijst</span>
+  <span class="trust-dot">●</span>
+  <span class="trust-item">🤖 CarWatch AI</span>
+</div>
+
+<!-- USE CASES -->
+<div class="usecases">
+  <div class="usecases-inner">
+    <div class="section-label">Wanneer gebruik je CarWatch?</div>
+    <div class="section-title" style="text-align:center;">Voor elke auto die je overweegt</div>
+    <div class="section-sub" style="text-align:center;">Van veiling tot particulier aanbod — altijd binnen 30 seconden een onderbouwd inkoopadvies.</div>
+    <div class="usecase-grid">
+      <div class="usecase-card">
+        <span class="usecase-icon">🏷️</span>
+        <div class="usecase-title">Online veiling</div>
+        <div class="usecase-desc">BCA, Autorola, Belcar, BNDE — analyseer een lot voordat je een bod plaatst.</div>
+      </div>
+      <div class="usecase-card">
+        <span class="usecase-icon">👤</span>
+        <div class="usecase-title">Particulier aanbod</div>
+        <div class="usecase-desc">Auto aangeboden via Marktplaats of via-via? Plak de tekst of link in en weet direct de waarde.</div>
+      </div>
+      <div class="usecase-card">
+        <span class="usecase-icon">🔄</span>
+        <div class="usecase-title">Inruil bij verkoop</div>
+        <div class="usecase-desc">Klant komt met een inruiler. Kenteken invoeren en binnen 30 seconden een reëel bod in handen.</div>
+      </div>
+      <div class="usecase-card">
+        <span class="usecase-icon">🏢</span>
+        <div class="usecase-title">Zakelijke vloot inkoop</div>
+        <div class="usecase-desc">Lease-retour of fleet-voertuig? Voeg het schaderapport toe en zie direct de werkelijke margeruimte.</div>
+      </div>
+      <div class="usecase-card">
+        <span class="usecase-icon">📧</span>
+        <div class="usecase-title">Aanbod per mail</div>
+        <div class="usecase-desc">Importeur of collega stuurt een aanbieding? Plak de mail in — CarWatch herkent alle relevante data automatisch.</div>
+      </div>
+      <div class="usecase-card">
+        <span class="usecase-icon">🔗</span>
+        <div class="usecase-title">Online advertentie</div>
+        <div class="usecase-desc">Kopieer de URL van een BCA-lot, AutoScout of Marktplaats-advertentie — CarWatch leest de pagina uit.</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- HOW IT WORKS -->
+<div style="background:white; border-bottom:1px solid var(--gray-bdr);">
+  <div class="section section-center">
+    <div class="section-label">Hoe werkt het?</div>
+    <div class="section-title">Drie stappen, 30 seconden</div>
+    <div class="section-sub">Geen ingewikkeld systeem. Gewoon invoeren, analyseren, beslissen.</div>
+    <div class="steps">
+      <div class="step">
+        <div class="step-num">1</div>
+        <div class="step-title">Voer de auto in</div>
+        <div class="step-desc">Kenteken, veilingmail, PDF-rapport of een link naar het lot. CarWatch herkent het automatisch.</div>
+      </div>
+      <div class="step">
+        <div class="step-num">2</div>
+        <div class="step-title">AI analyseert</div>
+        <div class="step-desc">RDW, JP.cars, Autotelex Pro, ANWB en CarWatch AI worden gecombineerd tot één helder beeld.</div>
+      </div>
+      <div class="step">
+        <div class="step-num">3</div>
+        <div class="step-title">Beslis met vertrouwen</div>
+        <div class="step-desc">Concreet inkoopadvies, verkoopadvies en marktanalyse — onderbouwd, zonder giswerk.</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- FEATURES -->
+<div style="background:var(--gray-bg); border-bottom:1px solid var(--gray-bdr);">
+  <div class="section">
+    <div class="section-label" style="text-align:center;">Wat CarWatch doet</div>
+    <div class="section-title" style="text-align:center;">Alles wat je nodig hebt, direct beschikbaar</div>
+    <div class="features-grid">
+      <div class="feature-card">
+        <div class="feature-top">
+          <div class="feature-icon-box">🏛️</div>
+          <div class="feature-title">RDW Verificatie</div>
+        </div>
+        <div class="feature-desc">Automatische check via de officiële RDW kentekendienst. APK-datum, WOK-status, gewicht, vermogen en meer.</div>
+      </div>
+      <div class="feature-card">
+        <div class="feature-top">
+          <div class="feature-icon-box">📊</div>
+          <div class="feature-title">Marktwaarde (meerdere bronnen)</div>
+        </div>
+        <div class="feature-desc">JP.cars, Autotelex Pro en ANWB Koerslijst gecombineerd. Handelsinkoopwaarde, bandbreedte en actueel marktaanbod.</div>
+      </div>
+      <div class="feature-card">
+        <div class="feature-top">
+          <div class="feature-icon-box">🤖</div>
+          <div class="feature-title">CarWatch AI Taxatie</div>
+        </div>
+        <div class="feature-desc">Het CarWatch AI-algoritme analyseert alle data en schrijft een concreet inkoopadvies inclusief risicosignalering en maximale biedprijs.</div>
+      </div>
+      <div class="feature-card">
+        <div class="feature-top">
+          <div class="feature-icon-box">🔧</div>
+          <div class="feature-title">Schadeanalyse</div>
+        </div>
+        <div class="feature-desc">PDF-rapport of online schadepagina uploaden. CarWatch herkent schadeposten, classificeert ernst en schat herstelkosten in.</div>
+      </div>
+      <div class="feature-card">
+        <div class="feature-top">
+          <div class="feature-icon-box">📖</div>
+          <div class="feature-title">Tekst & Mail extractie</div>
+        </div>
+        <div class="feature-desc">Plak een veilingmail of aanbieding in. CarWatch herkent automatisch kenteken, prijs, km-stand en schadeomschrijving.</div>
+      </div>
+      <div class="feature-card">
+        <div class="feature-top">
+          <div class="feature-icon-box">🗂️</div>
+          <div class="feature-title">Persoonlijk Archief</div>
+        </div>
+        <div class="feature-desc">Elke analyse wordt opgeslagen in jouw account. Terug­kijken, vergelijken en je inkoophistorie bijhouden.</div>
+      </div>
+    </div>
+
+    <div style="margin-top:32px;">
+      <div class="section-label" style="margin-bottom:14px;">Invoermethodes</div>
+      <div class="input-methods">
+        <div class="method-card">
+          <span class="method-icon">🔑</span>
+          <div><div class="method-title">Kenteken</div><div class="method-desc">Direct invoeren — RDW + markt + AI in één keer.</div></div>
+        </div>
+        <div class="method-card">
+          <span class="method-icon">📧</span>
+          <div><div class="method-title">Email of tekst plakken</div><div class="method-desc">Veilingmail of aanbieding — data wordt automatisch herkend.</div></div>
+        </div>
+        <div class="method-card">
+          <span class="method-icon">📄</span>
+          <div><div class="method-title">PDF schaderapport</div><div class="method-desc">BCA, Autorola, Belcar of eigen rapport uploaden.</div></div>
+        </div>
+        <div class="method-card">
+          <span class="method-icon">🔗</span>
+          <div><div class="method-title">Schadelink of lot-URL</div><div class="method-desc">Kopieer de link — CarWatch leest de pagina automatisch uit.</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- DATA SOURCES -->
+<div class="sources-section">
+  <div class="sources-inner">
+    <div class="sources-label">Databronnen</div>
+    <div class="sources-title">Alle relevante databronnen gecombineerd</div>
+    <div class="sources-sub">CarWatch trekt realtime data uit de meest betrouwbare bronnen in de branche.</div>
+    <div class="sources-grid">
+      <div class="source-card">
+        <span class="source-icon">🏛️</span>
+        <div>
+          <div class="source-name">RDW Kentekendienst</div>
+          <div class="source-desc">Officiële voertuigregistratie. APK, WOK, gewicht, vermogen, eerste toelating.</div>
+        </div>
+      </div>
+      <div class="source-card">
+        <span class="source-icon">📊</span>
+        <div>
+          <div class="source-name">JP.cars</div>
+          <div class="source-desc">Handelsinkoopwaarden en marktprijzen voor professionele inkopers.</div>
+        </div>
+      </div>
+      <div class="source-card">
+        <span class="source-icon">📈</span>
+        <div>
+          <div class="source-name">Autotelex Pro</div>
+          <div class="source-desc">Dé taxatiestandaard voor de Nederlandse autobranche. Breed erkend bij verzekeraars en dealers.</div>
+        </div>
+      </div>
+      <div class="source-card">
+        <span class="source-icon">📋</span>
+        <div>
+          <div class="source-name">ANWB Koerslijst</div>
+          <div class="source-desc">Consumentenreferentieprijs voor margevergelijking en verkoopadvies.</div>
+        </div>
+      </div>
+      <div class="source-card">
+        <span class="source-icon">🌍</span>
+        <div>
+          <div class="source-name">DAT / EurotaxGlass</div>
+          <div class="source-desc">Europese taxatiestandaard — relevant bij import/export en cross-border handel.</div>
+        </div>
+      </div>
+      <div class="source-card">
+        <span class="source-icon">🔁</span>
+        <div>
+          <div class="source-name">Cars2Click</div>
+          <div class="source-desc">Realtime handelsprijzen en inkoopalternatieven op de B2B-markt.</div>
+        </div>
+      </div>
+      <div class="source-card">
+        <span class="source-icon">🤖</span>
+        <div>
+          <div class="source-name">Google CarWatch AI</div>
+          <div class="source-desc">Alle data wordt door het CarWatch AI-algoritme samengebracht tot één helder, bruikbaar inkoopadvies.</div>
+        </div>
+      </div>
+      <div class="source-card">
+        <span class="source-icon">📰</span>
+        <div>
+          <div class="source-name">Live marktdata</div>
+          <div class="source-desc">Actueel aanbod van AutoScout24 en Marktplaats voor realtime marktpositiebepaling.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- CTA -->
+<div class="cta-section">
+  <h2>Klaar om elke auto in<br>30 seconden te doorlichten?</h2>
+  <p>Probeer de interactieve demo of neem direct contact op.</p>
+  <div class="cta-group">
+    <a class="btn-white" href="demo.html">⚡ Probeer de demo</a>
+    <a class="btn-ghost" href="mailto:rick@ai-werkers.nl?subject=CarWatch interesse">📩 Neem contact op</a>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-logo">
+    <svg viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg" width="16" height="16">
+      <circle cx="16" cy="11" r="4.2" fill="none" stroke="white" stroke-width="2.2"/>
+      <line x1="16" y1="15.2" x2="16" y2="30" stroke="white" stroke-width="2.2"/>
+      <line x1="16" y1="20" x2="6" y2="26.5" stroke="white" stroke-width="2"/>
+      <line x1="16" y1="20" x2="25.5" y2="15.5" stroke="white" stroke-width="2"/>
+      <line x1="16" y1="30" x2="10" y2="41" stroke="white" stroke-width="2"/>
+      <line x1="16" y1="30" x2="22" y2="41" stroke="white" stroke-width="2"/>
+      <circle cx="25.5" cy="15.5" r="3" fill="white" opacity="0.6"/>
+    </svg>
+    <span style="color:rgba(255,255,255,0.6);font-weight:900;font-size:12px;">ai-werkers</span>
+  </div>
+  <div>CarWatch · een product van <a href="https://ai-werkers.nl">ai-werkers.nl</a> · <a href="mailto:rick@ai-werkers.nl">rick@ai-werkers.nl</a> · Utrecht</div>
+</footer>
+
+</body>
+</html>
